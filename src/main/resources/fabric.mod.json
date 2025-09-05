@@ -1,0 +1,35 @@
+{
+  "schemaVersion": 1,
+  "id": "audioplayer_roleplay",
+  "version": "${mod_version}",
+  "name": "AudioPlayer Roleplay Addon",
+  "description": "Audio Player Roleplay Addon",
+  "authors": [
+    "BreadLoaf",
+    "Max Henkel"
+  ],
+  "license": "All Rights Reserved",
+  "icon": "icon.png",
+  "environment": "*",
+  "entrypoints": {
+    "main": [
+      "xyz.breadloaf.audioplayerroleplay.AudioPlayerRoleplayMod"
+    ],
+    "voicechat": [
+      "xyz.breadloaf.audioplayerroleplay.voicechat.RoleplayVoicechatPlugin"
+    ]
+  },
+  "mixins": [
+    "audioplayer_roleplay.mixins.json"
+  ],
+  "depends": {
+    "fabricloader": "${fabric_loader_dependency}",
+    "minecraft": "${minecraft_dependency}",
+    "audioplayer": "${audioplayer_dependency}",
+    "voicechat_api": ">=${voicechat_api_version}"
+  },
+  "breaks": {
+    "fabric-api": "${fabric_api_dependency_breaks}"
+  },
+  "accessWidener": "audioplayer_roleplay.accesswidener"
+}
