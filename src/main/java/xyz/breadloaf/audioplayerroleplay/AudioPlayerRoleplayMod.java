@@ -1,6 +1,7 @@
 package xyz.breadloaf.audioplayerroleplay;
 
 import de.maxhenkel.admiral.MinecraftAdmiral;
+import xyz.breadloaf.audioplayerroleplay.audioplayer.AudioplayerIntegration;
 import xyz.breadloaf.audioplayerroleplay.commands.TestCommands;
 import xyz.breadloaf.audioplayerroleplay.config.ServerConfig;
 import xyz.breadloaf.audioplayerroleplay.permission.RoleplayPermissionManager;
@@ -27,6 +28,7 @@ public class AudioPlayerRoleplayMod implements ModInitializer {
                     TestCommands.class
             ).setPermissionManager(RoleplayPermissionManager.INSTANCE).build();
         });
+        AudioplayerIntegration.onInitialize();
     }
 
     public static Path getModConfigFolder() {
