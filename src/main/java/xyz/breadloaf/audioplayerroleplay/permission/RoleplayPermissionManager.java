@@ -92,7 +92,7 @@ public class RoleplayPermissionManager implements PermissionManager<CommandSourc
                 case EVERYONE -> true;
                 case NOONE -> false;
                 case OPS ->
-                        player != null && player.hasPermissions(player.getServer().getOperatorUserPermissionLevel());
+                        player != null && player.hasPermissions(player.level().getServer().operatorUserPermissionLevel());
             };
         }
 
