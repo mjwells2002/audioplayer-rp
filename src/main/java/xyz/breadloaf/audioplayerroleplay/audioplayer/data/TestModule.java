@@ -1,4 +1,4 @@
-package xyz.breadloaf.audioplayerroleplay.audioplayer;
+package xyz.breadloaf.audioplayerroleplay.audioplayer.data;
 
 import de.maxhenkel.audioplayer.api.data.AudioDataModule;
 import de.maxhenkel.audioplayer.api.data.DataAccessor;

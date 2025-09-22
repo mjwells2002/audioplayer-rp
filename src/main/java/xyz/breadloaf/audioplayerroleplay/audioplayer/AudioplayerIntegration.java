@@ -6,14 +6,25 @@ import de.maxhenkel.audioplayer.api.events.AudioEvents;
 import de.maxhenkel.audioplayer.api.events.GetSoundIdEvent;
 import net.minecraft.resources.ResourceLocation;
 import xyz.breadloaf.audioplayerroleplay.AudioPlayerRoleplayMod;
+import xyz.breadloaf.audioplayerroleplay.audioplayer.data.StaticPlaybackModule;
+import xyz.breadloaf.audioplayerroleplay.audioplayer.data.TestModule;
+import xyz.breadloaf.audioplayerroleplay.audioplayer.events.StaticPlaybackHooks;
 
 public class AudioplayerIntegration {
 
     public static ModuleKey<TestModule> TEST_MODULE;
+    public static ModuleKey<StaticPlaybackModule> STATIC_PLAYBACK_MODULE;
 
     public static void onInitialize() {
-        TEST_MODULE = AudioPlayerApi.instance().registerModuleType(ResourceLocation.fromNamespaceAndPath(AudioPlayerRoleplayMod.MODID, "test"), TestModule::new);
+        AudioPlayerApi audioPlayerApi = AudioPlayerApi.instance();
+        TEST_MODULE = audioPlayerApi.registerModuleType(ResourceLocation.fromNamespaceAndPath(AudioPlayerRoleplayMod.MODID, "test"), TestModule::new);
+        STATIC_PLAYBACK_MODULE = audioPlayerApi.registerModuleType(ResourceLocation.fromNamespaceAndPath(AudioPlayerRoleplayMod.MODID, "static"), StaticPlaybackModule::new);
+
         AudioEvents.GET_SOUND_ID.register(AudioplayerIntegration::getSoundId);
+
+        AudioEvents.PLAY_NOTE_BLOCK.register(StaticPlaybackHooks::onPlayback);
+        AudioEvents.PLAY_GOAT_HORN.register(StaticPlaybackHooks::onPlayback);
+        AudioEvents.PLAY_MUSIC_DISC.register(StaticPlaybackHooks::onPlayback);
     }
 
     private static void getSoundId(GetSoundIdEvent event) {
