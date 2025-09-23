@@ -1,10 +1,10 @@
-package xyz.breadloaf.audioplayerroleplay.audioplayer.data;
+package xyz.breadloaf.audioplayerroleplay.modules.CustomVolumeCategory;
 
 import de.maxhenkel.audioplayer.api.data.AudioDataModule;
 import de.maxhenkel.audioplayer.api.data.DataAccessor;
 import de.maxhenkel.audioplayer.api.data.DataModifier;
 
-public class StaticPlaybackModule implements AudioDataModule {
+public class VolumeCategoryModule implements AudioDataModule {
     @Override
     public void load(DataAccessor dataAccessor) throws Exception {
 
