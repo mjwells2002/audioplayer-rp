@@ -1,4 +1,4 @@
-package xyz.breadloaf.audioplayerroleplay.modules.StaticPlayback;
+package xyz.breadloaf.audioplayerroleplay.modules.Regions;
 
 import de.maxhenkel.audioplayer.api.AudioPlayerApi;
 import de.maxhenkel.audioplayer.api.data.AudioData;
@@ -13,9 +13,10 @@ import xyz.breadloaf.audioplayerroleplay.AudioPlayerRoleplayMod;
 import xyz.breadloaf.audioplayerroleplay.modules.BaseModuleCommand;
 import xyz.breadloaf.audioplayerroleplay.modules.IUserFacingModule;
 
-public class StaticPlayback implements IUserFacingModule {
-    public static ModuleKey<StaticPlaybackModule> STATIC_PLAYBACK_MODULE;
-    static String ID = "static";
+
+public class RegionsModule implements IUserFacingModule  {
+    static String ID = "regions";
+    public static ModuleKey<RegionDataModule> REGIONS_DATA_MODULE;
 
     @Override
     public String getID() {
@@ -24,29 +25,29 @@ public class StaticPlayback implements IUserFacingModule {
 
     @Override
     public String register(AudioPlayerApi audioPlayerApi) {
-        STATIC_PLAYBACK_MODULE = audioPlayerApi.registerModuleType(ResourceLocation.fromNamespaceAndPath(AudioPlayerRoleplayMod.MODID, ID), StaticPlaybackModule::new);
+        AudioEvents.POST_PLAY_GOAT_HORN.register(RegionHooks::onPostPlay);
+        AudioEvents.POST_PLAY_NOTE_BLOCK.register(RegionHooks::onPostPlay);
+        AudioEvents.POST_PLAY_MUSIC_DISC.register(RegionHooks::onPostPlay);
 
-        AudioEvents.PLAY_NOTE_BLOCK.register(StaticPlaybackHooks::onPlayback);
-        AudioEvents.PLAY_GOAT_HORN.register(StaticPlaybackHooks::onPlayback);
-        AudioEvents.PLAY_MUSIC_DISC.register(StaticPlaybackHooks::onPlayback);
+        AudioEvents.GET_DISTANCE.register(RegionHooks::onGetDistance);
+        REGIONS_DATA_MODULE = audioPlayerApi.registerModuleType(ResourceLocation.fromNamespaceAndPath(AudioPlayerRoleplayMod.MODID, ID), RegionDataModule::new);
 
         return ID;
     }
 
     @Override
     public MutableComponent generalUsageInfo() {
-        return Component.literal("The sound will play without 3D Audio within the range of the item");
+        return Component.literal("Modifies the item to play only within a set cube region, overriding the range option");
     }
 
     @Override
-    @Nullable
-    public MutableComponent itemSpecificInfo(ItemStack itemStack, AudioData audioData) {
+    public @Nullable MutableComponent itemSpecificInfo(ItemStack itemStack, AudioData audioData) {
         return null;
     }
 
     @Override
     public MutableComponent moduleName() {
-        return Component.literal("Static Sound Mode");
+        return Component.literal("Cube Regions");
     }
 
     @Override
@@ -61,11 +62,11 @@ public class StaticPlayback implements IUserFacingModule {
 
     @Override
     public Class<? extends BaseModuleCommand> getCommandClass() {
-        return StaticCommands.class;
+        return RegionCommands.class;
     }
 
     @Override
     public @Nullable ModuleKey<?> getModuleKey() {
-        return STATIC_PLAYBACK_MODULE;
+        return REGIONS_DATA_MODULE;
     }
 }

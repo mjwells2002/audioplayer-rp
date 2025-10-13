@@ -10,11 +10,11 @@ import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.item.ItemStack;
 import org.jetbrains.annotations.Nullable;
 import xyz.breadloaf.audioplayerroleplay.AudioPlayerRoleplayMod;
+import xyz.breadloaf.audioplayerroleplay.modules.BaseModuleCommand;
 import xyz.breadloaf.audioplayerroleplay.modules.IUserFacingModule;
-import xyz.breadloaf.audioplayerroleplay.modules.RandomizedPlayback.RandomizedSoundModule;
 
 public class CustomVolumeCategory implements IUserFacingModule {
-    private static String ID = "custom_volume_category";
+    static String ID = "custom_volume_category";
     public static ModuleKey<VolumeCategoryModule> CUSTOM_VOLUME_CATEGORY_MODULE;
 
     @Override
@@ -49,7 +49,22 @@ public class CustomVolumeCategory implements IUserFacingModule {
     }
 
     @Override
-    public boolean hasModule(AudioData audioData) {
-        return audioData.getModule(CUSTOM_VOLUME_CATEGORY_MODULE).isPresent();
+    public boolean isEnabledByDefault() {
+        return true;
+    }
+
+    @Override
+    public boolean canBeDisabled() {
+        return true;
+    }
+
+    @Override
+    public Class<? extends BaseModuleCommand> getCommandClass() {
+        return VolumeCategoryCommands.class;
+    }
+
+    @Override
+    public @Nullable ModuleKey<?> getModuleKey() {
+        return CUSTOM_VOLUME_CATEGORY_MODULE;
     }
 }

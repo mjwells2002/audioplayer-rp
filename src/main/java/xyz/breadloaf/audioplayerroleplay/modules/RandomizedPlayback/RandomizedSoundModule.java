@@ -1,8 +1,10 @@
 package xyz.breadloaf.audioplayerroleplay.modules.RandomizedPlayback;
 
+import com.google.gson.JsonArray;
+import com.google.gson.JsonElement;
+import com.google.gson.JsonObject;
 import de.maxhenkel.audioplayer.api.data.AudioDataModule;
-import de.maxhenkel.audioplayer.api.data.DataAccessor;
-import de.maxhenkel.audioplayer.api.data.DataModifier;
+
 
 import java.util.ArrayList;
 import java.util.UUID;
@@ -10,33 +12,39 @@ import java.util.concurrent.ThreadLocalRandom;
 
 public class RandomizedSoundModule implements AudioDataModule {
     ArrayList<UUID> soundIds = new ArrayList<>();
+
     public RandomizedSoundModule() {
 
     }
+
     public RandomizedSoundModule(UUID u1) {
         soundIds.add(u1);
     }
+
     @Override
-    public void load(DataAccessor dataAccessor) throws Exception {
+    public void load(JsonObject dataAccessor) throws Exception {
         soundIds.clear();
-        int count = dataAccessor.getInt("count");
-        for (int i = 0; i < count; i++) {
-            long low = dataAccessor.getLong(i + "L");
-            long high = dataAccessor.getLong(i + "H");
-            UUID uuid = new UUID(high,low);
-            soundIds.add(uuid);
+        JsonArray array = dataAccessor.getAsJsonArray("ids");
+        for (JsonElement element : array) {
+            if (element.isJsonArray()) {
+                JsonArray uuid = element.getAsJsonArray();
+                if (uuid.size() == 2) {
+                    soundIds.add(new UUID(uuid.get(1).getAsLong(),uuid.get(0).getAsLong()));
+                }
+            }
         }
     }
 
     @Override
-    public void save(DataModifier dataModifier) throws Exception {
-        int i = 0;
+    public void save(JsonObject dataModifier) throws Exception {
+        JsonArray array = new JsonArray();
         for (UUID uuid : soundIds) {
-            dataModifier.setLong(i + "L",uuid.getLeastSignificantBits());
-            dataModifier.setLong(i + "H",uuid.getMostSignificantBits());
-            i++;
+            JsonArray jsonUUID = new JsonArray();
+            jsonUUID.add(uuid.getLeastSignificantBits());
+            jsonUUID.add(uuid.getMostSignificantBits());
+            array.add(jsonUUID);
         }
-        dataModifier.setInt("count", i);
+        dataModifier.add("ids", array);
     }
 
     public UUID getUUID() {
@@ -46,4 +54,5 @@ public class RandomizedSoundModule implements AudioDataModule {
     public void addUUID(UUID uuid) {
         soundIds.add(uuid);
     }
+
 }

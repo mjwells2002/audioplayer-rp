@@ -10,6 +10,7 @@ import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.item.ItemStack;
 import org.jetbrains.annotations.Nullable;
 import xyz.breadloaf.audioplayerroleplay.AudioPlayerRoleplayMod;
+import xyz.breadloaf.audioplayerroleplay.modules.BaseModuleCommand;
 import xyz.breadloaf.audioplayerroleplay.modules.IUserFacingModule;
 import xyz.breadloaf.audioplayerroleplay.modules.ModuleUtils;
 
@@ -17,7 +18,7 @@ import java.util.UUID;
 
 public class RandomizedPlayback implements IUserFacingModule  {
     public static ModuleKey<RandomizedSoundModule> RANDOM_PLAYBACK_MODULE;
-    private static final String ID = "rng_playback";
+    static final String ID = "rng_playback";
 
     @Override
     public String getID() {
@@ -57,8 +58,24 @@ public class RandomizedPlayback implements IUserFacingModule  {
         return Component.literal("Randomized Sound Playback");
     }
 
+
     @Override
-    public boolean hasModule(AudioData audioData) {
-        return audioData.getModule(RANDOM_PLAYBACK_MODULE).isPresent();
+    public boolean isEnabledByDefault() {
+        return true;
+    }
+
+    @Override
+    public boolean canBeDisabled() {
+        return true;
+    }
+
+    @Override
+    public Class<? extends BaseModuleCommand> getCommandClass() {
+        return RandomizedPlaybackCommands.class;
+    }
+
+    @Override
+    public @Nullable ModuleKey<?> getModuleKey() {
+        return RANDOM_PLAYBACK_MODULE;
     }
 }

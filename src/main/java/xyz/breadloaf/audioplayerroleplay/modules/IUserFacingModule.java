@@ -2,7 +2,7 @@ package xyz.breadloaf.audioplayerroleplay.modules;
 
 import de.maxhenkel.audioplayer.api.AudioPlayerApi;
 import de.maxhenkel.audioplayer.api.data.AudioData;
-import net.minecraft.network.chat.Component;
+import de.maxhenkel.audioplayer.api.data.ModuleKey;
 import net.minecraft.network.chat.MutableComponent;
 import net.minecraft.world.item.ItemStack;
 import org.jetbrains.annotations.Nullable;
@@ -13,5 +13,8 @@ public interface IUserFacingModule {
     MutableComponent generalUsageInfo();
     @Nullable MutableComponent itemSpecificInfo(ItemStack itemStack, AudioData audioData);
     MutableComponent moduleName();
-    boolean hasModule(AudioData audioData);
+    boolean isEnabledByDefault();
+    boolean canBeDisabled();
+    @Nullable Class<? extends BaseModuleCommand> getCommandClass();
+    @Nullable ModuleKey<?> getModuleKey();
 }
