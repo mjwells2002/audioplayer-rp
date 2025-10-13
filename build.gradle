@@ -18,7 +18,7 @@ dependencies {
     modRuntimeOnly "de.maxhenkel.voicechat:voicechat-api:${voicechat_api_version}:fabric-stub"
     modRuntimeOnly "maven.modrinth:simple-voice-chat:fabric-${voicechat_mod_version}"
 
-    modImplementation fileTree(dir: 'libs', include: ['*.jar'])
+    modImplementation "maven.modrinth:audioplayer:fabric-${audioplayer_mod_version}"
 }
 
 processResources {
