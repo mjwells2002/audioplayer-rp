@@ -1,5 +1,6 @@
 package xyz.breadloaf.audioplayerroleplay.modules;
 
+import de.maxhenkel.admiral.argumenttype.ArgumentTypeRegistry;
 import de.maxhenkel.audioplayer.api.AudioPlayerApi;
 import de.maxhenkel.audioplayer.api.data.AudioData;
 import de.maxhenkel.audioplayer.api.data.ModuleKey;
@@ -16,5 +17,7 @@ public interface IUserFacingModule {
     boolean isEnabledByDefault();
     boolean canBeDisabled();
     @Nullable Class<? extends BaseModuleCommand> getCommandClass();
+    void earlyRegistrationHook();
+    void registerArgumentTypes(ArgumentTypeRegistry argumentTypeRegistry);
     @Nullable ModuleKey<?> getModuleKey();
 }

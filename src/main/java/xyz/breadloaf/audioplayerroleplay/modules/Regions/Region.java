@@ -43,10 +43,13 @@ public class Region {
     }
 
     public boolean isNearbyEnoughToPlay(Vec3 pos) {
+        if (RegionsModule.REGIONS_CONFIG.max_source_to_region_distance.get() <= 0) {
+            return true;
+        }
+        int tolerance = RegionsModule.REGIONS_CONFIG.max_source_to_region_distance.get();
         int x = (int) Math.floor(pos.x);
         int y = (int) Math.floor(pos.y);
         int z = (int) Math.floor(pos.z);
-        int tolerance = 16;
         int minX = this.minX - tolerance;
         int minY = this.minY - tolerance;
         int minZ = this.minZ - tolerance;

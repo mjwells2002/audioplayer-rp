@@ -1,5 +1,6 @@
 package xyz.breadloaf.audioplayerroleplay.modules.StaticPlayback;
 
+import de.maxhenkel.admiral.argumenttype.ArgumentTypeRegistry;
 import de.maxhenkel.audioplayer.api.AudioPlayerApi;
 import de.maxhenkel.audioplayer.api.data.AudioData;
 import de.maxhenkel.audioplayer.api.data.ModuleKey;
@@ -62,6 +63,16 @@ public class StaticPlayback implements IUserFacingModule {
     @Override
     public Class<? extends BaseModuleCommand> getCommandClass() {
         return StaticCommands.class;
+    }
+
+    @Override
+    public void earlyRegistrationHook() {
+
+    }
+
+    @Override
+    public void registerArgumentTypes(ArgumentTypeRegistry argumentTypeRegistry) {
+
     }
 
     @Override

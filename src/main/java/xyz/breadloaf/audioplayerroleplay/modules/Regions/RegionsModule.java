@@ -1,23 +1,28 @@
 package xyz.breadloaf.audioplayerroleplay.modules.Regions;
 
+import de.maxhenkel.admiral.argumenttype.ArgumentTypeRegistry;
 import de.maxhenkel.audioplayer.api.AudioPlayerApi;
 import de.maxhenkel.audioplayer.api.data.AudioData;
 import de.maxhenkel.audioplayer.api.data.ModuleKey;
 import de.maxhenkel.audioplayer.api.events.AudioEvents;
+import de.maxhenkel.configbuilder.ConfigBuilder;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.MutableComponent;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.item.ItemStack;
 import org.jetbrains.annotations.Nullable;
 import xyz.breadloaf.audioplayerroleplay.AudioPlayerRoleplayMod;
+import xyz.breadloaf.audioplayerroleplay.config.ServerConfig;
 import xyz.breadloaf.audioplayerroleplay.modules.BaseModuleCommand;
 import xyz.breadloaf.audioplayerroleplay.modules.IUserFacingModule;
+
+import static xyz.breadloaf.audioplayerroleplay.AudioPlayerRoleplayMod.getModuleConfigFolder;
 
 
 public class RegionsModule implements IUserFacingModule  {
     static String ID = "regions";
     public static ModuleKey<RegionDataModule> REGIONS_DATA_MODULE;
-
+    public static RegionsConfig REGIONS_CONFIG = ConfigBuilder.builder(RegionsConfig::new).path(getModuleConfigFolder(ID).resolve("regions.properties")).build();
     @Override
     public String getID() {
         return ID;
@@ -63,6 +68,16 @@ public class RegionsModule implements IUserFacingModule  {
     @Override
     public Class<? extends BaseModuleCommand> getCommandClass() {
         return RegionCommands.class;
+    }
+
+    @Override
+    public void earlyRegistrationHook() {
+
+    }
+
+    @Override
+    public void registerArgumentTypes(ArgumentTypeRegistry argumentTypeRegistry) {
+
     }
 
     @Override
