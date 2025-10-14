@@ -31,7 +31,7 @@ public class VolumeCategoryArgumentType implements ArgumentType<CategoryManager.
             reader.skip();
         }
 
-        while (reader.canRead() && (Character.isLetter(reader.peek()))) {
+        while (reader.canRead() && (Character.isLetterOrDigit(reader.peek()) || reader.peek() == '_')) {
             reader.skip();
         }
 
