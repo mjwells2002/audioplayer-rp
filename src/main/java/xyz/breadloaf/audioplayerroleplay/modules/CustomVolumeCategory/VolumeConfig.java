@@ -8,9 +8,11 @@ import de.maxhenkel.configbuilder.entry.serializer.StringSerializer;
 import java.nio.file.Path;
 import java.util.Arrays;
 import java.util.HashMap;
+import java.util.regex.Pattern;
 
 public class VolumeConfig extends CommentedPropertyConfig {
     HashMap<String, VolumeCategory> volumeCategories = new HashMap<>();
+    public static final Pattern ID_REGEX = Pattern.compile("^[a-z_]{1,16}$");
 
     public VolumeConfig(Path path) {
         super(new CommentedProperties(false));
@@ -26,8 +28,8 @@ public class VolumeConfig extends CommentedPropertyConfig {
         properties.clear();
         properties.setHeaderComments(Arrays.asList(
                 "Configuration for volume category module.",
-                "To add categories add the following 3 keys, id can be a max of 12 letters",
-                "id.name, id.icon (optional), id.description (optional)",
+                "To add categories add the following 3 keys, id can be a max of 12 letters a-z and _ (no uppercase)",
+                "id.name, id.icon (Optional), id.description (Optional)",
                 "here is an example, to create a category called example",
                 "> # The display name for category id example",
                 "> example.name=Example Category",
@@ -44,17 +46,30 @@ public class VolumeConfig extends CommentedPropertyConfig {
                 String id = key.substring(0,key.length()-".name".length());
                 if (id.length() > 12) {
                     System.out.println("Removing invalid volume category from config");
-                } else {
-                    this.volumeCategories.put(id,new VolumeCategory(
-                            id,
-                            stringEntry(id+".name", tmp.get(id+".name"), "","" ,"" ,"The display name for category id "+id),
-                            stringEntry(id+".icon", tmp.getOrDefault(id+".icon",""), "(Optional) The icon for category id "+id,
-                                    "suggested format PNG",
-                                    "16x16 pixels required"),
-                            stringEntry(id+".description", tmp.getOrDefault(id+".description",""), "(Optional) The description for category id "+id,
-                                    "displayed on hover in the voicechat volume menu")
-                    ));
+                    continue;
+                } else if (!ID_REGEX.matcher(id).matches()) {
+                    if (ID_REGEX.matcher(id.toLowerCase()).matches() && tmp.get(id.toLowerCase()+".name") == null) {
+                        System.out.println("Warning renaming volume category from " + id + " to " + id.toLowerCase());
+                        tmp.put(id.toLowerCase()+".name",tmp.get(id+".name"));
+                        tmp.put(id.toLowerCase()+".icon",tmp.getOrDefault(id+".icon",""));
+                        tmp.put(id.toLowerCase()+".description",tmp.getOrDefault(id+".description",""));
+                        id = id.toLowerCase();
+                    } else {
+                        System.out.println("Removing invalid volume category from config");
+                        continue;
+                    }
                 }
+
+                this.volumeCategories.put(id,new VolumeCategory(
+                        id,
+                        stringEntry(id+".name", tmp.get(id+".name"), "","" ,"" ,"The display name for category id "+id),
+                        stringEntry(id+".icon", tmp.getOrDefault(id+".icon",""), "(Optional) The icon for category id "+id,
+                                "suggested format PNG",
+                                "16x16 pixels required"),
+                        stringEntry(id+".description", tmp.getOrDefault(id+".description",""), "(Optional) The description for category id "+id,
+                                "displayed on hover in the voicechat volume menu")
+                ));
+
             }
         }
 
