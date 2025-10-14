@@ -8,6 +8,7 @@ import de.maxhenkel.configbuilder.entry.serializer.StringSerializer;
 import java.nio.file.Path;
 import java.util.Arrays;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.regex.Pattern;
 
 public class VolumeConfig extends CommentedPropertyConfig {
@@ -40,7 +41,7 @@ public class VolumeConfig extends CommentedPropertyConfig {
                 "> # (Optional) The description for category id example",
                 "> # displayed on hover in the voicechat volume menu",
                 "> example.description=This is an example"));
-
+        HashSet<String> updated_ids = new HashSet<>();
         for (String key : keys) {
             if (key.endsWith(".name")) {
                 String id = key.substring(0,key.length()-".name".length());
@@ -59,7 +60,7 @@ public class VolumeConfig extends CommentedPropertyConfig {
                         continue;
                     }
                 }
-
+                updated_ids.add(id);
                 this.volumeCategories.put(id,new VolumeCategory(
                         id,
                         stringEntry(id+".name", tmp.get(id+".name"), "","" ,"" ,"The display name for category id "+id),
@@ -72,7 +73,11 @@ public class VolumeConfig extends CommentedPropertyConfig {
 
             }
         }
-
+        HashSet<String> toRemove = new HashSet<>(this.volumeCategories.keySet());
+        toRemove.removeAll(updated_ids);
+        for (String id : toRemove) {
+            this.volumeCategories.remove(id);
+        }
         save();
     }
 

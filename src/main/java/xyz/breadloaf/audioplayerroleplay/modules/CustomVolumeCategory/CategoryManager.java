@@ -16,6 +16,7 @@ import java.io.File;
 import java.io.IOException;
 import java.util.Arrays;
 import java.util.HashMap;
+import java.util.HashSet;
 
 public class CategoryManager {
     public static HashMap<String, UserVolumeCategory> CATEGORIES = new HashMap<>();
@@ -82,6 +83,12 @@ public class CategoryManager {
                 RoleplayVoicechatPlugin.voicechatServerApi.registerVolumeCategory(volumeCategory);
                 CATEGORIES.put(volumeCategoryData.id, new UserVolumeCategory(volumeCategoryData.id, volumeCategory));
             }
+        }
+        HashSet<String> removedIds = new HashSet<>(CATEGORIES.keySet());
+        removedIds.removeAll(CustomVolumeCategory.VOLUME_CATEGORIES.volumeCategories.keySet());
+        for (String id : removedIds) {
+            UserVolumeCategory volumeCategory = CATEGORIES.remove(id);
+            RoleplayVoicechatPlugin.voicechatServerApi.unregisterVolumeCategory(volumeCategory.volumeCategory);
         }
     }
 

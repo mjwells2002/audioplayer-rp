@@ -41,8 +41,8 @@ public class VolumeCategoryCommands extends BaseModuleCommand {
     @Command("reload")
     public void reload(CommandContext<CommandSourceStack> context) throws CommandSyntaxException {
         CustomVolumeCategory.VOLUME_CATEGORIES.reload();
-
         CategoryManager.reloadCategories();
+
         context.getSource().sendSuccess(() -> Component.literal("Reloaded categories from config!"), false);
     }
 
