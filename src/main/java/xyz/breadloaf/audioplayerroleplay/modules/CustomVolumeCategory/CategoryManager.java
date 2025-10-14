@@ -40,21 +40,21 @@ public class CategoryManager {
         for (VolumeConfig.VolumeCategory volumeCategoryData : CustomVolumeCategory.VOLUME_CATEGORIES.volumeCategories.values()) {
             int[][] icon = null;
             String iconPath = volumeCategoryData.icon.get();
-            if (iconPath != null) {
+            if (iconPath != null && !iconPath.isEmpty()) {
                 File path = AudioPlayerRoleplayMod.getModuleConfigFolder(CustomVolumeCategory.ID).resolve(iconPath).toFile();
                 if (path.exists()) {
                     try {
                         BufferedImage img = ImageIO.read(path);
                         if (img.getWidth() != 16 || img.getHeight() != 16) {
-                            System.out.println("Ignoring icon image invalid dimensions");
+                            CustomVolumeCategory.LOGGER.error("Ignoring icon image for id: {}, invalid dimensions", volumeCategoryData.id);
                             continue;
                         }
                         icon = RoleplayVoicechatPlugin.getImageData(img);
                     } catch (IOException e) {
-                        System.out.println(e);
+                        CustomVolumeCategory.LOGGER.error("Ignoring icon image for id: {}, failed to read file", volumeCategoryData.id);
                     }
                 } else {
-                    System.out.println("icon doesnt exist");
+                    CustomVolumeCategory.LOGGER.error("Ignoring icon image for id: {}, file does not exist", volumeCategoryData.id);
                 }
             }
             UserVolumeCategory category = CATEGORIES.get(volumeCategoryData.id);

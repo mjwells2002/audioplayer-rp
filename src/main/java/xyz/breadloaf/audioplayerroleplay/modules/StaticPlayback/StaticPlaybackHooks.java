@@ -27,7 +27,6 @@ public class StaticPlaybackHooks {
             }
 
             if (!event.isOverridden()) {
-                System.out.println("Made Static");
                 StaticAudioChannel audioChannel = voicechatServerApi.createStaticAudioChannel(UUID.randomUUID());
                 if (audioChannel == null) {
                     //TODO: fail gracefully

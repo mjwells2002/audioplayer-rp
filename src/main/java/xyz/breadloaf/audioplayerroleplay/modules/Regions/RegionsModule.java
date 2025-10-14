@@ -10,6 +10,7 @@ import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.MutableComponent;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.item.ItemStack;
+import org.apache.logging.log4j.Logger;
 import org.jetbrains.annotations.Nullable;
 import xyz.breadloaf.audioplayerroleplay.AudioPlayerRoleplayMod;
 import xyz.breadloaf.audioplayerroleplay.config.ServerConfig;
@@ -17,6 +18,7 @@ import xyz.breadloaf.audioplayerroleplay.modules.BaseModuleCommand;
 import xyz.breadloaf.audioplayerroleplay.modules.IUserFacingModule;
 
 import static xyz.breadloaf.audioplayerroleplay.AudioPlayerRoleplayMod.getModuleConfigFolder;
+import static xyz.breadloaf.audioplayerroleplay.AudioPlayerRoleplayMod.getModuleLogger;
 
 
 public class RegionsModule implements IUserFacingModule  {
@@ -27,6 +29,7 @@ public class RegionsModule implements IUserFacingModule  {
     public String getID() {
         return ID;
     }
+    static Logger LOGGER = getModuleLogger(ID);
 
     @Override
     public String register(AudioPlayerApi audioPlayerApi) {

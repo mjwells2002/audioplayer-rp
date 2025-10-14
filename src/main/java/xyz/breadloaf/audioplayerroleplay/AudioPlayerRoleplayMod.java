@@ -33,6 +33,10 @@ public class AudioPlayerRoleplayMod implements ModInitializer {
     public static final Logger LOGGER = LogManager.getLogger(MODID);
     public static ServerConfig SERVER_CONFIG;
 
+    public static Logger getModuleLogger(String id) {
+        return LogManager.getLogger(MODID+"_"+id);
+    }
+
     @Override
     public void onInitialize() {
         SERVER_CONFIG = ConfigBuilder.builder(ServerConfig::new).path(getModConfigFolder().resolve("roleplay-server.properties")).build();

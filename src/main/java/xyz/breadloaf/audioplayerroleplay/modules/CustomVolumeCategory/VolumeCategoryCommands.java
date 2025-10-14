@@ -42,13 +42,6 @@ public class VolumeCategoryCommands extends BaseModuleCommand {
     public void reload(CommandContext<CommandSourceStack> context) throws CommandSyntaxException {
         CustomVolumeCategory.VOLUME_CATEGORIES.reload();
 
-        for (Map.Entry<String, VolumeConfig.VolumeCategory> entry : CustomVolumeCategory.VOLUME_CATEGORIES.volumeCategories.entrySet()) {
-            System.out.println(entry.getKey());
-            System.out.println(entry.getValue().name.get());
-            System.out.println(entry.getValue().icon.get());
-            System.out.println(entry.getValue().description.get());
-        }
-
         CategoryManager.reloadCategories();
         context.getSource().sendSuccess(() -> Component.literal("Reloaded categories from config!"), false);
     }

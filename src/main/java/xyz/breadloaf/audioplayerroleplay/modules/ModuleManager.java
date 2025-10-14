@@ -28,7 +28,7 @@ public class ModuleManager {
                     continue;
                 }
             }
-            System.out.printf("module %s is enabled%n", userFacingModule.getID());
+            AudioPlayerRoleplayMod.LOGGER.info("module {} is enabled", userFacingModule.getID());
             ENABLED_MODULES.put(userFacingModule.getID(), userFacingModule);
         }
     }

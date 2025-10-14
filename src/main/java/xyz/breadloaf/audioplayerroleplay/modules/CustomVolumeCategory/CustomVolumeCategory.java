@@ -12,6 +12,7 @@ import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.MutableComponent;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.item.ItemStack;
+import org.apache.logging.log4j.Logger;
 import org.jetbrains.annotations.Nullable;
 import xyz.breadloaf.audioplayerroleplay.AudioPlayerRoleplayMod;
 import xyz.breadloaf.audioplayerroleplay.modules.BaseModuleCommand;
@@ -19,12 +20,13 @@ import xyz.breadloaf.audioplayerroleplay.modules.IUserFacingModule;
 import xyz.breadloaf.audioplayerroleplay.modules.RandomizedPlayback.RandomizedSoundModule;
 
 import static xyz.breadloaf.audioplayerroleplay.AudioPlayerRoleplayMod.MODID;
+import static xyz.breadloaf.audioplayerroleplay.AudioPlayerRoleplayMod.getModuleLogger;
 
 public class CustomVolumeCategory implements IUserFacingModule {
     static String ID = "custom_volume_category";
     public static ModuleKey<VolumeCategoryModule> CUSTOM_VOLUME_CATEGORY_MODULE;
     public static VolumeConfig VOLUME_CATEGORIES = new VolumeConfig(AudioPlayerRoleplayMod.getModuleConfigFolder(ID).resolve("categories.properties"));
-
+    static Logger LOGGER = getModuleLogger(ID);
     @Override
     public String getID() {
         return ID;

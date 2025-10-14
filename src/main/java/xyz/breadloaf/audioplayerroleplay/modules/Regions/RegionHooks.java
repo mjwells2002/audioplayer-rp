@@ -20,7 +20,7 @@ public class RegionHooks {
                 ChannelReference<? extends AudioChannel> audioChannelChannelReference = event.getChannel();
                 audioChannelChannelReference.getChannel().setFilter(serverPlayer -> region.containsPosition(serverPlayer.getPosition()));
             } else {
-                System.out.println("WARNING: ignoring region for playback");
+                RegionsModule.LOGGER.warn("ignoring region for playback");
             }
         }
     }
