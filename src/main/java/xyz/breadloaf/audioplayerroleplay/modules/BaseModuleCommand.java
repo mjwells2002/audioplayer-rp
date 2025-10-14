@@ -9,7 +9,6 @@ import de.maxhenkel.audioplayer.api.data.ModuleKey;
 import net.minecraft.ChatFormatting;
 import net.minecraft.commands.CommandSourceStack;
 import net.minecraft.network.chat.Component;
-import net.minecraft.network.chat.HoverEvent;
 import net.minecraft.network.chat.MutableComponent;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.item.ItemStack;
@@ -41,7 +40,7 @@ public abstract class BaseModuleCommand {
         ModuleKey<?> key = moduleInterface.getModuleKey();
 
         if (audioData.getModule(key).isPresent()) {
-            audioData.setModule(key,null);
+            audioData.removeModule(key);
             audioData.saveToItem(heldItem);
             context.getSource().sendSuccess(() -> Component.literal("Removed module ").append(moduleInterface.moduleName()).append(" from item").withStyle(ChatFormatting.GREEN), false);
         } else {
