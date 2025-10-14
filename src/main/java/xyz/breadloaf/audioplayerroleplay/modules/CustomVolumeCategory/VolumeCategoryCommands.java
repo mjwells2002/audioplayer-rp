@@ -35,7 +35,7 @@ public class VolumeCategoryCommands extends BaseModuleCommand {
 
         audioData.setModule(CustomVolumeCategory.CUSTOM_VOLUME_CATEGORY_MODULE, new VolumeCategoryModule(volumeCategory.id));
         audioData.saveToItem(heldItem);
-        context.getSource().sendSuccess(() -> Component.literal("Test module applied"), false);
+        context.getSource().sendSuccess(() -> Component.literal("Custom volume category module applied, Category: ").append(CategoryManager.getChatComponentFor(volumeCategory.id)), false);
     }
 
     @Command("reload")
@@ -50,6 +50,7 @@ public class VolumeCategoryCommands extends BaseModuleCommand {
         }
 
         CategoryManager.reloadCategories();
+        context.getSource().sendSuccess(() -> Component.literal("Reloaded categories from config!"), false);
     }
 
     @Override

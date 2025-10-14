@@ -16,6 +16,7 @@ import org.jetbrains.annotations.Nullable;
 import xyz.breadloaf.audioplayerroleplay.AudioPlayerRoleplayMod;
 import xyz.breadloaf.audioplayerroleplay.modules.BaseModuleCommand;
 import xyz.breadloaf.audioplayerroleplay.modules.IUserFacingModule;
+import xyz.breadloaf.audioplayerroleplay.modules.RandomizedPlayback.RandomizedSoundModule;
 
 import static xyz.breadloaf.audioplayerroleplay.AudioPlayerRoleplayMod.MODID;
 
@@ -48,7 +49,11 @@ public class CustomVolumeCategory implements IUserFacingModule {
 
     @Override
     public @Nullable MutableComponent itemSpecificInfo(ItemStack itemStack, AudioData audioData) {
-        return null;
+        VolumeCategoryModule data = audioData.getModule(CUSTOM_VOLUME_CATEGORY_MODULE).orElse(null);
+        if (data != null) {
+            return Component.literal("Volume Category: ").append(CategoryManager.getChatComponentFor(data.id));
+        }
+        return Component.empty();
     }
 
     @Override

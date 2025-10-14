@@ -1,9 +1,15 @@
 package xyz.breadloaf.audioplayerroleplay.modules.CustomVolumeCategory;
 
 import de.maxhenkel.voicechat.api.VolumeCategory;
+import net.minecraft.ChatFormatting;
+import net.minecraft.client.User;
+import net.minecraft.network.chat.Component;
+import net.minecraft.network.chat.HoverEvent;
+import net.minecraft.network.chat.MutableComponent;
 import xyz.breadloaf.audioplayerroleplay.AudioPlayerRoleplayMod;
 import xyz.breadloaf.audioplayerroleplay.voicechat.RoleplayVoicechatPlugin;
 
+import javax.annotation.Nullable;
 import javax.imageio.ImageIO;
 import java.awt.image.BufferedImage;
 import java.io.File;
@@ -13,6 +19,22 @@ import java.util.HashMap;
 
 public class CategoryManager {
     public static HashMap<String, UserVolumeCategory> CATEGORIES = new HashMap<>();
+
+    public static MutableComponent getChatComponentFor(String id) {
+        UserVolumeCategory userVolumeCategory = CATEGORIES.get(id);
+        MutableComponent mutableComponent = Component.empty();
+        if (userVolumeCategory != null) {
+            mutableComponent.append(
+                    Component.literal(userVolumeCategory.volumeCategory.getName())
+                            .withStyle(ChatFormatting.AQUA)
+                            .withStyle(style -> style.withHoverEvent(new HoverEvent.ShowText(Component.literal("ID: " + userVolumeCategory.id)))));
+        } else {
+            mutableComponent.append(
+                    Component.literal("Unknown ID: " + id)
+                            .withStyle(ChatFormatting.RED));
+        }
+        return mutableComponent;
+    }
 
     public static void reloadCategories() {
         for (VolumeConfig.VolumeCategory volumeCategoryData : CustomVolumeCategory.VOLUME_CATEGORIES.volumeCategories.values()) {
@@ -66,6 +88,7 @@ public class CategoryManager {
     public static class UserVolumeCategory {
         String id;
         VolumeCategory volumeCategory;
+
         public UserVolumeCategory(String id, VolumeCategory volumeCategory) {
             this.id = id;
             this.volumeCategory = volumeCategory;
