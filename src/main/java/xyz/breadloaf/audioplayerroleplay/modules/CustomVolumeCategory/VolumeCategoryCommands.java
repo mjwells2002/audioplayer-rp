@@ -40,10 +40,17 @@ public class VolumeCategoryCommands extends BaseModuleCommand {
 
     @Command("reload")
     public void reload(CommandContext<CommandSourceStack> context) throws CommandSyntaxException {
-        CustomVolumeCategory.VOLUME_CATEGORIES.reload();
+
+        VolumeConfig.ConfigReloadResult reloadResult = CustomVolumeCategory.VOLUME_CATEGORIES.reloadWithResult();
         CategoryManager.reloadCategories();
 
-        context.getSource().sendSuccess(() -> Component.literal("Reloaded categories from config!"), false);
+        if (reloadResult == VolumeConfig.ConfigReloadResult.ERRORS) {
+            context.getSource().sendFailure(Component.literal("Errors logged while reloading config!, please check server console for more information"));
+        } else if (reloadResult == VolumeConfig.ConfigReloadResult.WARNINGS_LOGGED) {
+            context.getSource().sendSuccess(() -> Component.literal("Warnings logged while reloading config, please check server console for more information"), false);
+        } else {
+            context.getSource().sendSuccess(() -> Component.literal("Reloaded categories from config!"), false);
+        }
     }
 
     @Override

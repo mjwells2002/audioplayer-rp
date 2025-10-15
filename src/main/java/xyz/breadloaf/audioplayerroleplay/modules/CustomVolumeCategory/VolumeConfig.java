@@ -21,16 +21,16 @@ public class VolumeConfig extends CommentedPropertyConfig {
         reload();
     }
 
-    @Override
-    public void reload() {
+    public ConfigReloadResult reloadWithResult() {
         super.reload();
+        ConfigReloadResult reloadResult = ConfigReloadResult.NO_ERRORS;
         String[] keys = getEntries().keySet().toArray(new String[0]);
         HashMap<String, String> tmp = new HashMap<>(properties);
         properties.clear();
         properties.setHeaderComments(Arrays.asList(
                 "Configuration for volume category module.",
                 "To add categories add the following 3 keys, id can be a max of 12 letters a-z and _ (no uppercase)",
-                "id.name, id.icon (Optional), id.description (Optional)",
+                "id.name (max 16 chars), id.icon (Optional), id.description (Optional)",
                 "here is an example, to create a category called example",
                 "> # The display name for category id example",
                 "> example.name=Example Category",
@@ -46,18 +46,30 @@ public class VolumeConfig extends CommentedPropertyConfig {
             if (key.endsWith(".name")) {
                 String id = key.substring(0,key.length()-".name".length());
                 if (id.length() > 12) {
-                    System.out.println("Removing invalid volume category from config");
+                    CustomVolumeCategory.LOGGER.error("Removing invalid volume category {} from config, too long", id);
+                    reloadResult = ConfigReloadResult.ERRORS;
                     continue;
                 } else if (!ID_REGEX.matcher(id).matches()) {
                     if (ID_REGEX.matcher(id.toLowerCase()).matches() && tmp.get(id.toLowerCase()+".name") == null) {
-                        System.out.println("Warning renaming volume category from " + id + " to " + id.toLowerCase());
+                        CustomVolumeCategory.LOGGER.warn("Renaming volume category from {} to {}", id, id.toLowerCase());
                         tmp.put(id.toLowerCase()+".name",tmp.get(id+".name"));
                         tmp.put(id.toLowerCase()+".icon",tmp.getOrDefault(id+".icon",""));
                         tmp.put(id.toLowerCase()+".description",tmp.getOrDefault(id+".description",""));
                         id = id.toLowerCase();
+                        if (reloadResult != ConfigReloadResult.ERRORS) {
+                            reloadResult = ConfigReloadResult.WARNINGS_LOGGED;
+                        }
                     } else {
-                        System.out.println("Removing invalid volume category from config");
+                        CustomVolumeCategory.LOGGER.error("Removing invalid volume category {} from config, invalid character", id);
+                        reloadResult = ConfigReloadResult.ERRORS;
                         continue;
+                    }
+                }
+                if (tmp.get(id+".name").length() > 16) {
+                    CustomVolumeCategory.LOGGER.warn("Truncating name for volume category id {}, max length is 16", id);
+                    tmp.put(id+".name",tmp.get(id+".name").substring(0,16));
+                    if (reloadResult != ConfigReloadResult.ERRORS) {
+                        reloadResult = ConfigReloadResult.WARNINGS_LOGGED;
                     }
                 }
                 updated_ids.add(id);
@@ -79,6 +91,12 @@ public class VolumeConfig extends CommentedPropertyConfig {
             this.volumeCategories.remove(id);
         }
         save();
+        return reloadResult;
+    }
+
+    @Override
+    public void reload() {
+        reloadWithResult();
     }
 
     private StringConfigEntry stringEntry(String key, String def, String... comments) {
@@ -86,6 +104,12 @@ public class VolumeConfig extends CommentedPropertyConfig {
         stringEntry.reload();
 
         return stringEntry;
+    }
+
+    public enum ConfigReloadResult {
+        NO_ERRORS,
+        WARNINGS_LOGGED,
+        ERRORS,
     }
 
     public class VolumeCategory {
