@@ -3,6 +3,7 @@ package xyz.breadloaf.audioplayerroleplay.modules.RandomizedPlayback;
 import com.mojang.brigadier.context.CommandContext;
 import com.mojang.brigadier.exceptions.CommandSyntaxException;
 import de.maxhenkel.admiral.annotations.Command;
+import de.maxhenkel.admiral.annotations.Name;
 import de.maxhenkel.admiral.annotations.RequiresPermission;
 import de.maxhenkel.audioplayer.api.AudioPlayerApi;
 import de.maxhenkel.audioplayer.api.data.AudioData;
@@ -41,7 +42,7 @@ public class RandomizedPlaybackCommands extends BaseModuleCommand {
 
     @RequiresPermission("audioplayer_roleplay.test")
     @Command("append")
-    public void append(CommandContext<CommandSourceStack> context, UUID uuid) throws CommandSyntaxException {
+    public void append(CommandContext<CommandSourceStack> context, @Name("id") UUID uuid) throws CommandSyntaxException {
         ServerPlayer player = context.getSource().getPlayerOrException();
         ItemStack heldItem = player.getMainHandItem();
         if (heldItem.isEmpty()) {
