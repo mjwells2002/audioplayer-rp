@@ -15,21 +15,21 @@ import org.apache.logging.log4j.Logger;
 import org.jetbrains.annotations.Nullable;
 import xyz.breadloaf.audioplayerroleplay.AudioPlayerRoleplayMod;
 import xyz.breadloaf.audioplayerroleplay.modules.BaseModuleCommand;
-import xyz.breadloaf.audioplayerroleplay.modules.CustomVolumeCategory.CategoryManager;
-import xyz.breadloaf.audioplayerroleplay.modules.CustomVolumeCategory.VolumeCategoryArgumentType;
 import xyz.breadloaf.audioplayerroleplay.modules.IUserFacingModule;
 
 import static xyz.breadloaf.audioplayerroleplay.AudioPlayerRoleplayMod.*;
 
+public class RegionsModule implements IUserFacingModule {
 
-public class RegionsModule implements IUserFacingModule  {
     static String ID = "regions";
     public static ModuleKey<RegionDataModule> REGIONS_DATA_MODULE;
     public static RegionsConfig REGIONS_CONFIG = ConfigBuilder.builder(RegionsConfig::new).path(getModuleConfigFolder(ID).resolve("regions.properties")).build();
+
     @Override
     public String getID() {
         return ID;
     }
+
     static Logger LOGGER = getModuleLogger(ID);
 
     @Override
@@ -76,7 +76,7 @@ public class RegionsModule implements IUserFacingModule  {
 
     @Override
     public void earlyRegistrationHook() {
-        net.fabricmc.fabric.api.command.v2.ArgumentTypeRegistry.registerArgumentType(ResourceLocation.fromNamespaceAndPath(MODID,ID), RegionArgumentType.class, SingletonArgumentInfo.contextFree(RegionArgumentType::region));
+        net.fabricmc.fabric.api.command.v2.ArgumentTypeRegistry.registerArgumentType(ResourceLocation.fromNamespaceAndPath(MODID, ID), RegionArgumentType.class, SingletonArgumentInfo.contextFree(RegionArgumentType::region));
     }
 
     @Override

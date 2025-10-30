@@ -32,7 +32,7 @@ public class StaticPlaybackHooks {
                     //TODO: fail gracefully
                     throw new IllegalStateException("Creating Channel Failed");
                 }
-                ChannelReference<StaticAudioChannel> channelReference = audioPlayerApi.playChannel(audioChannel,soundUUID,event.getPlayer());
+                ChannelReference<StaticAudioChannel> channelReference = audioPlayerApi.playChannel(audioChannel, soundUUID, event.getPlayer());
 
                 audioChannel.setCategory(event.getCategory());
 
@@ -41,8 +41,10 @@ public class StaticPlaybackHooks {
                 channelReference.setOnChannelUpdate((channel) -> {
                     //TODO: this is bad, dont do this every update
                     channel.clearTargets();
-                    Collection<ServerPlayer> players = voicechatServerApi.getPlayersInRange(voicechatServerApi.fromServerLevel(event.getLevel()), voicechatServerApi.createPosition(location.x,location.y,location.z), range);
-                    players.forEach(serverPlayer -> {channel.addTarget(voicechatServerApi.getConnectionOf(serverPlayer));});
+                    Collection<ServerPlayer> players = voicechatServerApi.getPlayersInRange(voicechatServerApi.fromServerLevel(event.getLevel()), voicechatServerApi.createPosition(location.x, location.y, location.z), range);
+                    players.forEach(serverPlayer -> {
+                        channel.addTarget(voicechatServerApi.getConnectionOf(serverPlayer));
+                    });
                 });
 
                 try {

@@ -2,14 +2,12 @@ package xyz.breadloaf.audioplayerroleplay.modules.CustomVolumeCategory;
 
 import de.maxhenkel.voicechat.api.VolumeCategory;
 import net.minecraft.ChatFormatting;
-import net.minecraft.client.User;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.HoverEvent;
 import net.minecraft.network.chat.MutableComponent;
 import xyz.breadloaf.audioplayerroleplay.AudioPlayerRoleplayMod;
 import xyz.breadloaf.audioplayerroleplay.voicechat.RoleplayVoicechatPlugin;
 
-import javax.annotation.Nullable;
 import javax.imageio.ImageIO;
 import java.awt.image.BufferedImage;
 import java.io.File;
@@ -61,7 +59,7 @@ public class CategoryManager {
             UserVolumeCategory category = CATEGORIES.get(volumeCategoryData.id);
             boolean isModified = false;
             if (category != null) {
-                isModified |= !Arrays.deepEquals(category.volumeCategory.getIcon(),icon);
+                isModified |= !Arrays.deepEquals(category.volumeCategory.getIcon(), icon);
                 isModified |= !category.volumeCategory.getName().equals(volumeCategoryData.name.get());
                 if (category.volumeCategory.getDescription() != null) {
                     isModified |= !category.volumeCategory.getDescription().equals(volumeCategoryData.description.get());

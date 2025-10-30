@@ -12,7 +12,6 @@ import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.item.ItemStack;
 import org.apache.logging.log4j.Logger;
 import org.jetbrains.annotations.Nullable;
-import xyz.breadloaf.audioplayerroleplay.AudioPlayerRoleplayMod;
 import xyz.breadloaf.audioplayerroleplay.modules.BaseModuleCommand;
 import xyz.breadloaf.audioplayerroleplay.modules.IUserFacingModule;
 
@@ -25,6 +24,7 @@ public class CustomVolumeCategory implements IUserFacingModule {
     public static ModuleKey<VolumeCategoryModule> CUSTOM_VOLUME_CATEGORY_MODULE;
     public static VolumeConfig VOLUME_CATEGORIES;
     static Logger LOGGER = getModuleLogger(ID);
+
     @Override
     public String getID() {
         return ID;
@@ -33,7 +33,9 @@ public class CustomVolumeCategory implements IUserFacingModule {
     @Override
     public String register(AudioPlayerApi audioPlayerApi) {
         Path path = getModuleDataFolder(ID);
-        if (path == null) { throw new IllegalStateException("Module registration happened before server start!"); }
+        if (path == null) {
+            throw new IllegalStateException("Module registration happened before server start!");
+        }
         VOLUME_CATEGORIES = new VolumeConfig(path.resolve("categories.properties"));
 
         AudioEvents.POST_PLAY_GOAT_HORN.register(VolumeCategoryHooks::onPostPlay);
@@ -82,7 +84,7 @@ public class CustomVolumeCategory implements IUserFacingModule {
 
     @Override
     public void earlyRegistrationHook() {
-        net.fabricmc.fabric.api.command.v2.ArgumentTypeRegistry.registerArgumentType(ResourceLocation.fromNamespaceAndPath(MODID,ID),VolumeCategoryArgumentType.class, SingletonArgumentInfo.contextFree(VolumeCategoryArgumentType::volumeCategory));
+        net.fabricmc.fabric.api.command.v2.ArgumentTypeRegistry.registerArgumentType(ResourceLocation.fromNamespaceAndPath(MODID, ID), VolumeCategoryArgumentType.class, SingletonArgumentInfo.contextFree(VolumeCategoryArgumentType::volumeCategory));
     }
 
     @Override

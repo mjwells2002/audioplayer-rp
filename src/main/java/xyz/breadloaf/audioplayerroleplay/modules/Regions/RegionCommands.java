@@ -10,11 +10,11 @@ import net.minecraft.core.BlockPos;
 import net.minecraft.network.chat.Component;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.item.ItemStack;
-import xyz.breadloaf.audioplayerroleplay.position.Position;
 import xyz.breadloaf.audioplayerroleplay.modules.BaseModuleCommand;
 
-@Command({"roleplay","regions"})
+@Command({"roleplay", "regions"})
 public class RegionCommands extends BaseModuleCommand {
+
     @Command("apply")
     public void region(CommandContext<CommandSourceStack> context, BlockPos p1, BlockPos p2) throws CommandSyntaxException {
         ServerPlayer player = context.getSource().getPlayerOrException();
@@ -39,7 +39,6 @@ public class RegionCommands extends BaseModuleCommand {
 
     @Command("test")
     public void test(CommandContext<CommandSourceStack> context, Region region) throws CommandSyntaxException {
-
 
     }
 

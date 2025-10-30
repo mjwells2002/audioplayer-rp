@@ -1,19 +1,16 @@
 package xyz.breadloaf.audioplayerroleplay.position;
 
 import com.google.gson.Gson;
-import net.fabricmc.loader.impl.lib.sat4j.core.Vec;
-import net.minecraft.core.BlockPos;
 import net.minecraft.core.Vec3i;
 import org.jetbrains.annotations.Nullable;
 import xyz.breadloaf.audioplayerroleplay.AudioPlayerRoleplayMod;
 
 import java.io.*;
 import java.nio.file.Path;
-import java.util.HashMap;
 import java.util.Set;
-import java.util.concurrent.ConcurrentHashMap;
 
 public class PositionManager {
+
     static PositionFile POSITIONS = new PositionFile();
 
     @Nullable
@@ -29,7 +26,7 @@ public class PositionManager {
             } catch (FileNotFoundException e) {
                 save();
             } catch (IOException e) {
-                AudioPlayerRoleplayMod.LOGGER.error("Error occurred while loading saved position data",e);
+                AudioPlayerRoleplayMod.LOGGER.error("Error occurred while loading saved position data", e);
             }
         } else {
             throw new IllegalStateException("Position DB Attempted load before world load!");
@@ -46,7 +43,7 @@ public class PositionManager {
                     bufferedWriter.write(new Gson().toJson(POSITIONS));
                     bufferedWriter.flush();
                 } catch (IOException e) {
-                    AudioPlayerRoleplayMod.LOGGER.error("Error occurred while saving position data",e);
+                    AudioPlayerRoleplayMod.LOGGER.error("Error occurred while saving position data", e);
                 }
             });
         }
@@ -64,7 +61,7 @@ public class PositionManager {
         if (exists(id)) {
             return false;
         }
-        POSITIONS.id_to_location.put(id,pos);
+        POSITIONS.id_to_location.put(id, pos);
         save();
         return true;
     }
@@ -73,7 +70,7 @@ public class PositionManager {
         if (!exists(id)) {
             return false;
         }
-        POSITIONS.id_to_location.put(id,pos);
+        POSITIONS.id_to_location.put(id, pos);
         save();
         return true;
     }

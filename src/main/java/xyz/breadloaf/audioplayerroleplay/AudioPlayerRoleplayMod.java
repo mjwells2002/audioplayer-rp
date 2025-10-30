@@ -9,7 +9,6 @@ import net.minecraft.commands.synchronization.SingletonArgumentInfo;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.world.level.storage.LevelResource;
-import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import xyz.breadloaf.audioplayerroleplay.commands.PositionCommands;
 import xyz.breadloaf.audioplayerroleplay.commands.TestCommands;
@@ -30,7 +29,6 @@ import xyz.breadloaf.audioplayerroleplay.position.PositionManager;
 import java.nio.file.Path;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
-import java.util.concurrent.ThreadFactory;
 
 public class AudioPlayerRoleplayMod implements ModInitializer {
 
@@ -38,14 +36,19 @@ public class AudioPlayerRoleplayMod implements ModInitializer {
     public static final Logger LOGGER = LogManager.getLogger(MODID);
     public static ServerConfig SERVER_CONFIG;
     public static LevelResource AUDIOPLAYER_RP_DATA_DIR = new LevelResource("audioplayer_rp");
-    public static ExecutorService SAVE_WORKER = Executors.newFixedThreadPool(1, r -> { Thread t = new Thread(r); t.setDaemon(true); t.setName("AudioPlayerRP-SaveWorker"); return t; });
+    public static ExecutorService SAVE_WORKER = Executors.newFixedThreadPool(1, r -> {
+        Thread t = new Thread(r);
+        t.setDaemon(true);
+        t.setName("AudioPlayerRP-SaveWorker");
+        return t;
+    });
 
     @Nullable
     public static MinecraftServer MINECRAFT_SERVER = null;
 
 
     public static Logger getModuleLogger(String id) {
-        return LogManager.getLogger(MODID+"_"+id);
+        return LogManager.getLogger(MODID + "_" + id);
     }
 
     @Override
@@ -57,7 +60,7 @@ public class AudioPlayerRoleplayMod implements ModInitializer {
             userFacingModule.earlyRegistrationHook();
         }
 
-        ArgumentTypeRegistry.registerArgumentType(ResourceLocation.fromNamespaceAndPath(MODID,"pos"), PositionArgumentType.class, SingletonArgumentInfo.contextFree(PositionArgumentType::region));
+        ArgumentTypeRegistry.registerArgumentType(ResourceLocation.fromNamespaceAndPath(MODID, "pos"), PositionArgumentType.class, SingletonArgumentInfo.contextFree(PositionArgumentType::region));
 
         CommandRegistrationCallback.EVENT.register((dispatcher, registryAccess, environment) -> {
             MinecraftAdmiral.Builder<CommandSourceStack> builder = MinecraftAdmiral.builder(dispatcher, registryAccess);
@@ -109,13 +112,17 @@ public class AudioPlayerRoleplayMod implements ModInitializer {
     @Nullable
     public static Path getModuleDataFolder(String module_id) {
         Path path = getModDataFolder();
-        if (path == null) { return null; }
+        if (path == null) {
+            return null;
+        }
         return path.resolve(module_id);
     }
 
     @Nullable
     public static Path getModDataFolder() {
-        if (MINECRAFT_SERVER == null) { return null; }
+        if (MINECRAFT_SERVER == null) {
+            return null;
+        }
         return MINECRAFT_SERVER.getWorldPath(AUDIOPLAYER_RP_DATA_DIR);
     }
 }

@@ -9,7 +9,7 @@ import net.minecraft.network.chat.MutableComponent;
 import net.minecraft.world.item.ItemStack;
 import org.jetbrains.annotations.Nullable;
 
-public class AudioPlayerDisplayWrapper implements  IUserFacingModule {
+public class AudioPlayerDisplayWrapper implements IUserFacingModule {
     @Override
     public String getID() {
         return "default";

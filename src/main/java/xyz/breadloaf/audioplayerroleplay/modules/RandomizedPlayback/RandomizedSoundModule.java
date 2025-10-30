@@ -29,7 +29,7 @@ public class RandomizedSoundModule implements AudioDataModule {
             if (element.isJsonArray()) {
                 JsonArray uuid = element.getAsJsonArray();
                 if (uuid.size() == 2) {
-                    soundIds.add(new UUID(uuid.get(1).getAsLong(),uuid.get(0).getAsLong()));
+                    soundIds.add(new UUID(uuid.get(1).getAsLong(), uuid.get(0).getAsLong()));
                 }
             }
         }
@@ -49,8 +49,9 @@ public class RandomizedSoundModule implements AudioDataModule {
 
     public UUID getUUID() {
         ThreadLocalRandom rng = ThreadLocalRandom.current();
-        return soundIds.get(rng.nextInt(0,soundIds.size()));
+        return soundIds.get(rng.nextInt(0, soundIds.size()));
     }
+
     public void addUUID(UUID uuid) {
         soundIds.add(uuid);
     }

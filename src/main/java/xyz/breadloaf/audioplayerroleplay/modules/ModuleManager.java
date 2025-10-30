@@ -10,6 +10,7 @@ import xyz.breadloaf.audioplayerroleplay.modules.StaticPlayback.StaticPlayback;
 import java.util.HashMap;
 
 public class ModuleManager {
+
     public static final HashMap<String, IUserFacingModule> ENABLED_MODULES = new HashMap<>();
     public static final HashMap<String, IUserFacingModule> MODULES = new HashMap<>();
 

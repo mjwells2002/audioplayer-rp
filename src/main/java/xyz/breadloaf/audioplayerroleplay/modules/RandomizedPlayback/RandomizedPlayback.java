@@ -17,7 +17,7 @@ import xyz.breadloaf.audioplayerroleplay.modules.ModuleUtils;
 
 import java.util.UUID;
 
-public class RandomizedPlayback implements IUserFacingModule  {
+public class RandomizedPlayback implements IUserFacingModule {
     public static ModuleKey<RandomizedSoundModule> RANDOM_PLAYBACK_MODULE;
     static final String ID = "rng_playback";
 

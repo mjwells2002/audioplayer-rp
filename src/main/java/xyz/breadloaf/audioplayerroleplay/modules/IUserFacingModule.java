@@ -10,14 +10,24 @@ import org.jetbrains.annotations.Nullable;
 
 public interface IUserFacingModule {
     String getID();
+
     String register(AudioPlayerApi audioPlayerApi);
+
     MutableComponent generalUsageInfo();
+
     @Nullable MutableComponent itemSpecificInfo(ItemStack itemStack, AudioData audioData);
+
     MutableComponent moduleName();
+
     boolean isEnabledByDefault();
+
     boolean canBeDisabled();
+
     @Nullable Class<? extends BaseModuleCommand> getCommandClass();
+
     void earlyRegistrationHook();
+
     void registerArgumentTypes(ArgumentTypeRegistry argumentTypeRegistry);
+
     @Nullable ModuleKey<?> getModuleKey();
 }

@@ -87,7 +87,9 @@ public abstract class BaseModuleCommand {
 
     private void sendModuleGeneralInfo(CommandContext<CommandSourceStack> context) throws CommandSyntaxException {
         IUserFacingModule moduleInterface = ModuleManager.ENABLED_MODULES.get(getModuleKey());
-        if (moduleInterface == null) { return; }
+        if (moduleInterface == null) {
+            return;
+        }
 
         context.getSource().sendSuccess(() -> moduleInterface.moduleName().withStyle(ChatFormatting.AQUA).append("\n").append(moduleInterface.generalUsageInfo()), false);
     }

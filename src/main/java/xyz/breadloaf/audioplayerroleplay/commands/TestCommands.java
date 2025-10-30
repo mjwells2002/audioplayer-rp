@@ -3,41 +3,21 @@ package xyz.breadloaf.audioplayerroleplay.commands;
 import com.mojang.brigadier.context.CommandContext;
 import com.mojang.brigadier.exceptions.CommandSyntaxException;
 import de.maxhenkel.admiral.annotations.Command;
-import de.maxhenkel.admiral.annotations.RequiresPermission;
 import de.maxhenkel.audioplayer.api.AudioPlayerApi;
 import de.maxhenkel.audioplayer.api.data.AudioData;
 import de.maxhenkel.audioplayer.api.data.ModuleKey;
 import net.minecraft.ChatFormatting;
 import net.minecraft.commands.CommandSourceStack;
-import net.minecraft.core.BlockPos;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.HoverEvent;
 import net.minecraft.network.chat.MutableComponent;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.item.ItemStack;
-import xyz.breadloaf.audioplayerroleplay.modules.CustomVolumeCategory.CustomVolumeCategory;
-import xyz.breadloaf.audioplayerroleplay.modules.CustomVolumeCategory.VolumeCategoryModule;
-import xyz.breadloaf.audioplayerroleplay.modules.Regions.RegionDataModule;
-import xyz.breadloaf.audioplayerroleplay.modules.Regions.RegionsModule;
-import xyz.breadloaf.audioplayerroleplay.modules.StaticPlayback.StaticPlaybackModule;
 import xyz.breadloaf.audioplayerroleplay.modules.IUserFacingModule;
 import xyz.breadloaf.audioplayerroleplay.modules.ModuleManager;
-import xyz.breadloaf.audioplayerroleplay.modules.RandomizedPlayback.RandomizedSoundModule;
-
-import static xyz.breadloaf.audioplayerroleplay.modules.RandomizedPlayback.RandomizedPlayback.RANDOM_PLAYBACK_MODULE;
-import static xyz.breadloaf.audioplayerroleplay.modules.StaticPlayback.StaticPlayback.STATIC_PLAYBACK_MODULE;
-
-import java.util.UUID;
 
 @Command("roleplay")
 public class TestCommands {
-
-
-
-
-
-
-
 
     @Command("info")
     public void info(CommandContext<CommandSourceStack> context) throws CommandSyntaxException {

@@ -4,7 +4,6 @@ import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonPrimitive;
 import de.maxhenkel.audioplayer.api.data.AudioDataModule;
-import de.maxhenkel.voicechat.api.VolumeCategory;
 
 public class VolumeCategoryModule implements AudioDataModule {
     String id;
@@ -30,6 +29,6 @@ public class VolumeCategoryModule implements AudioDataModule {
 
     @Override
     public void save(JsonObject jsonObject) throws Exception {
-        jsonObject.addProperty("id",id);
+        jsonObject.addProperty("id", id);
     }
 }

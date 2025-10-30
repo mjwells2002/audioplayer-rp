@@ -8,7 +8,6 @@ import com.mojang.brigadier.exceptions.DynamicCommandExceptionType;
 import com.mojang.brigadier.suggestion.Suggestions;
 import com.mojang.brigadier.suggestion.SuggestionsBuilder;
 import net.minecraft.commands.SharedSuggestionProvider;
-import net.minecraft.commands.arguments.coordinates.WorldCoordinates;
 import net.minecraft.network.chat.Component;
 import xyz.breadloaf.audioplayerroleplay.modules.CustomVolumeCategory.CategoryManager;
 
@@ -16,6 +15,7 @@ import java.util.concurrent.CompletableFuture;
 
 
 public class RegionArgumentType implements ArgumentType<Region> {
+
     public static final DynamicCommandExceptionType INVALID_REGION = new DynamicCommandExceptionType(o -> Component.literal("Invalid region id: " + o));
 
     public static RegionArgumentType region() {
@@ -39,8 +39,7 @@ public class RegionArgumentType implements ArgumentType<Region> {
             RegionsModule.LOGGER.info("parsed argument as string, {}", argString);
 
 
-
-            return new Region(0,0,0,0,0,0);
+            return new Region(0, 0, 0, 0, 0, 0);
         } catch (Exception e) {
             RegionsModule.LOGGER.error(e);
             e.printStackTrace();

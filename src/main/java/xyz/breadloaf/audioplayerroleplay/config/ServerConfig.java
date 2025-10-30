@@ -9,22 +9,15 @@ import java.util.HashMap;
 
 public class ServerConfig {
 
-    public final ConfigEntry<String> test;
-
     public final HashMap<String, ConfigEntry<Boolean>> enabled_modules;
 
     public ServerConfig(ConfigBuilder builder) {
         enabled_modules = new HashMap<>();
         for (IUserFacingModule userFacingModule : ModuleManager.MODULES.values()) {
             if (userFacingModule.canBeDisabled()) {
-                enabled_modules.put(userFacingModule.getID(),builder.booleanEntry(userFacingModule.getID(),userFacingModule.isEnabledByDefault(),"Enable or disable the %s module".formatted(userFacingModule.getID())));
+                enabled_modules.put(userFacingModule.getID(), builder.booleanEntry(userFacingModule.getID(), userFacingModule.isEnabledByDefault(), "Enable or disable the %s module".formatted(userFacingModule.getID())));
             }
         }
-        test = builder.stringEntry(
-                "test",
-                "",
-                "Just a test"
-        );
     }
 
 }

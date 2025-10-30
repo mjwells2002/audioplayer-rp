@@ -15,6 +15,7 @@ import xyz.breadloaf.audioplayerroleplay.modules.BaseModuleCommand;
 import xyz.breadloaf.audioplayerroleplay.modules.IUserFacingModule;
 
 public class StaticPlayback implements IUserFacingModule {
+
     public static ModuleKey<StaticPlaybackModule> STATIC_PLAYBACK_MODULE;
     static String ID = "static";
 

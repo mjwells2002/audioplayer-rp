@@ -67,7 +67,7 @@ public class Region {
     }
 
     public double getMaxDistanceTo(Vec3 pos) {
-        return Math.sqrt(Math.max(pos.distanceToSqr(minX,minY,minZ),pos.distanceToSqr(maxX,maxY,maxZ)));
+        return Math.sqrt(Math.max(pos.distanceToSqr(minX, minY, minZ), pos.distanceToSqr(maxX, maxY, maxZ)));
     }
 
     public JsonElement toJson() {

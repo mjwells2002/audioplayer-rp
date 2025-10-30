@@ -44,17 +44,17 @@ public class VolumeConfig extends CommentedPropertyConfig {
         HashSet<String> updated_ids = new HashSet<>();
         for (String key : keys) {
             if (key.endsWith(".name")) {
-                String id = key.substring(0,key.length()-".name".length());
+                String id = key.substring(0, key.length() - ".name".length());
                 if (id.length() > 12) {
                     CustomVolumeCategory.LOGGER.error("Removing invalid volume category {} from config, too long", id);
                     reloadResult = ConfigReloadResult.ERRORS;
                     continue;
                 } else if (!ID_REGEX.matcher(id).matches()) {
-                    if (ID_REGEX.matcher(id.toLowerCase()).matches() && tmp.get(id.toLowerCase()+".name") == null) {
+                    if (ID_REGEX.matcher(id.toLowerCase()).matches() && tmp.get(id.toLowerCase() + ".name") == null) {
                         CustomVolumeCategory.LOGGER.warn("Renaming volume category from {} to {}", id, id.toLowerCase());
-                        tmp.put(id.toLowerCase()+".name",tmp.get(id+".name"));
-                        tmp.put(id.toLowerCase()+".icon",tmp.getOrDefault(id+".icon",""));
-                        tmp.put(id.toLowerCase()+".description",tmp.getOrDefault(id+".description",""));
+                        tmp.put(id.toLowerCase() + ".name", tmp.get(id + ".name"));
+                        tmp.put(id.toLowerCase() + ".icon", tmp.getOrDefault(id + ".icon", ""));
+                        tmp.put(id.toLowerCase() + ".description", tmp.getOrDefault(id + ".description", ""));
                         id = id.toLowerCase();
                         if (reloadResult != ConfigReloadResult.ERRORS) {
                             reloadResult = ConfigReloadResult.WARNINGS_LOGGED;
@@ -65,21 +65,21 @@ public class VolumeConfig extends CommentedPropertyConfig {
                         continue;
                     }
                 }
-                if (tmp.get(id+".name").length() > 16) {
+                if (tmp.get(id + ".name").length() > 16) {
                     CustomVolumeCategory.LOGGER.warn("Truncating name for volume category id {}, max length is 16", id);
-                    tmp.put(id+".name",tmp.get(id+".name").substring(0,16));
+                    tmp.put(id + ".name", tmp.get(id + ".name").substring(0, 16));
                     if (reloadResult != ConfigReloadResult.ERRORS) {
                         reloadResult = ConfigReloadResult.WARNINGS_LOGGED;
                     }
                 }
                 updated_ids.add(id);
-                this.volumeCategories.put(id,new VolumeCategory(
+                this.volumeCategories.put(id, new VolumeCategory(
                         id,
-                        stringEntry(id+".name", tmp.get(id+".name"), "","" ,"" ,"The display name for category id "+id),
-                        stringEntry(id+".icon", tmp.getOrDefault(id+".icon",""), "(Optional) The icon for category id "+id,
+                        stringEntry(id + ".name", tmp.get(id + ".name"), "", "", "", "The display name for category id " + id),
+                        stringEntry(id + ".icon", tmp.getOrDefault(id + ".icon", ""), "(Optional) The icon for category id " + id,
                                 "suggested format PNG",
                                 "16x16 pixels required"),
-                        stringEntry(id+".description", tmp.getOrDefault(id+".description",""), "(Optional) The description for category id "+id,
+                        stringEntry(id + ".description", tmp.getOrDefault(id + ".description", ""), "(Optional) The description for category id " + id,
                                 "displayed on hover in the voicechat volume menu")
                 ));
 

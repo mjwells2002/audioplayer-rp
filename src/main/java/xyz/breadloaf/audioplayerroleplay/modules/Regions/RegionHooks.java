@@ -2,12 +2,8 @@ package xyz.breadloaf.audioplayerroleplay.modules.Regions;
 
 import de.maxhenkel.audioplayer.api.ChannelReference;
 import de.maxhenkel.audioplayer.api.events.GetDistanceEvent;
-import de.maxhenkel.audioplayer.api.events.PlayEvent;
 import de.maxhenkel.audioplayer.api.events.PostPlayEvent;
-import de.maxhenkel.voicechat.api.Position;
 import de.maxhenkel.voicechat.api.audiochannel.AudioChannel;
-import net.minecraft.world.phys.AABB;
-import net.minecraft.world.phys.Vec3;
 
 import static xyz.breadloaf.audioplayerroleplay.modules.Regions.RegionsModule.REGIONS_DATA_MODULE;
 

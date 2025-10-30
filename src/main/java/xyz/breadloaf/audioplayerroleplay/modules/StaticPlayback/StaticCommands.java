@@ -13,8 +13,9 @@ import xyz.breadloaf.audioplayerroleplay.modules.BaseModuleCommand;
 
 import static xyz.breadloaf.audioplayerroleplay.modules.StaticPlayback.StaticPlayback.STATIC_PLAYBACK_MODULE;
 
-@Command({"roleplay","static"})
+@Command({"roleplay", "static"})
 public class StaticCommands extends BaseModuleCommand {
+
     @Command("apply")
     public void setStatic(CommandContext<CommandSourceStack> context) throws CommandSyntaxException {
         ServerPlayer player = context.getSource().getPlayerOrException();

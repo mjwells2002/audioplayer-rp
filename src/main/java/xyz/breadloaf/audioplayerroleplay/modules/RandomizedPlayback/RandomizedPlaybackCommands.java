@@ -16,8 +16,9 @@ import java.util.UUID;
 
 import static xyz.breadloaf.audioplayerroleplay.modules.RandomizedPlayback.RandomizedPlayback.RANDOM_PLAYBACK_MODULE;
 
-@Command({"roleplay","randomized"})
+@Command({"roleplay", "randomized"})
 public class RandomizedPlaybackCommands extends BaseModuleCommand {
+
     @RequiresPermission("audioplayer_roleplay.test")
     @Command("enable")
     public void applyTest(CommandContext<CommandSourceStack> context) throws CommandSyntaxException {

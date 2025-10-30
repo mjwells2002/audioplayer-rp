@@ -30,7 +30,7 @@ public class Position {
             Vec3i loc = PositionManager.POSITIONS.id_to_location.get(this.posID);
             return loc;
         }
-        return new Vec3i(this.x,this.y,this.z);
+        return new Vec3i(this.x, this.y, this.z);
     }
 
     @Nullable
@@ -50,7 +50,7 @@ public class Position {
         }
         Vec3i vec3i = vec3i();
         if (vec3i != null) {
-            component.append(Component.literal("%d, %d, %d".formatted(vec3i.getX(),vec3i.getY(),vec3i.getZ())).withStyle(ChatFormatting.AQUA).withStyle(style -> style.withClickEvent(new ClickEvent.CopyToClipboard("%d, %d, %d".formatted(vec3i.getX(),vec3i.getY(),vec3i.getZ())))));
+            component.append(Component.literal("%d, %d, %d".formatted(vec3i.getX(), vec3i.getY(), vec3i.getZ())).withStyle(ChatFormatting.AQUA).withStyle(style -> style.withClickEvent(new ClickEvent.CopyToClipboard("%d, %d, %d".formatted(vec3i.getX(), vec3i.getY(), vec3i.getZ())))));
         } else {
             component.append(Component.literal("Location Not Found").withStyle(ChatFormatting.RED));
         }
@@ -58,6 +58,6 @@ public class Position {
         if (this.posID != null) {
             component.append(Component.literal(")"));
         }
-        return  component;
+        return component;
     }
 }

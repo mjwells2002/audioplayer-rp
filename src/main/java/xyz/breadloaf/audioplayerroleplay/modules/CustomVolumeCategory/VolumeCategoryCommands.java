@@ -5,14 +5,11 @@ import com.mojang.brigadier.exceptions.CommandSyntaxException;
 import de.maxhenkel.admiral.annotations.Command;
 import de.maxhenkel.audioplayer.api.AudioPlayerApi;
 import de.maxhenkel.audioplayer.api.data.AudioData;
-import de.maxhenkel.voicechat.api.VolumeCategory;
 import net.minecraft.commands.CommandSourceStack;
 import net.minecraft.network.chat.Component;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.item.ItemStack;
 import xyz.breadloaf.audioplayerroleplay.modules.BaseModuleCommand;
-
-import java.util.Map;
 
 @Command({"roleplay", "volume"})
 public class VolumeCategoryCommands extends BaseModuleCommand {
