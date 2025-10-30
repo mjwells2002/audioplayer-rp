@@ -17,7 +17,7 @@ import xyz.breadloaf.audioplayerroleplay.modules.IUserFacingModule;
 import xyz.breadloaf.audioplayerroleplay.modules.ModuleManager;
 
 @Command("roleplay")
-public class TestCommands {
+public class InfoCommands {
 
     @Command("info")
     public void info(CommandContext<CommandSourceStack> context) throws CommandSyntaxException {
