@@ -40,7 +40,7 @@ public class PositionManager {
         if (filePath != null) {
             AudioPlayerRoleplayMod.SAVE_WORKER.submit(() -> {
                 if (!filePath.toFile().exists()) {
-                    filePath.toFile().mkdirs();
+                    filePath.getParent().toFile().mkdirs();
                 }
                 try (BufferedWriter bufferedWriter = new BufferedWriter(new FileWriter(filePath.toFile()))) {
                     bufferedWriter.write(new Gson().toJson(POSITIONS));
