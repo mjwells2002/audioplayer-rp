@@ -16,13 +16,14 @@ import xyz.breadloaf.audioplayerroleplay.AudioPlayerRoleplayMod;
 import xyz.breadloaf.audioplayerroleplay.modules.BaseModuleCommand;
 import xyz.breadloaf.audioplayerroleplay.modules.IUserFacingModule;
 
-import static xyz.breadloaf.audioplayerroleplay.AudioPlayerRoleplayMod.MODID;
-import static xyz.breadloaf.audioplayerroleplay.AudioPlayerRoleplayMod.getModuleLogger;
+import java.nio.file.Path;
+
+import static xyz.breadloaf.audioplayerroleplay.AudioPlayerRoleplayMod.*;
 
 public class CustomVolumeCategory implements IUserFacingModule {
     static String ID = "custom_volume_category";
     public static ModuleKey<VolumeCategoryModule> CUSTOM_VOLUME_CATEGORY_MODULE;
-    public static VolumeConfig VOLUME_CATEGORIES = new VolumeConfig(AudioPlayerRoleplayMod.getModuleConfigFolder(ID).resolve("categories.properties"));
+    public static VolumeConfig VOLUME_CATEGORIES;
     static Logger LOGGER = getModuleLogger(ID);
     @Override
     public String getID() {
@@ -31,6 +32,10 @@ public class CustomVolumeCategory implements IUserFacingModule {
 
     @Override
     public String register(AudioPlayerApi audioPlayerApi) {
+        Path path = getModuleDataFolder(ID);
+        if (path == null) { throw new IllegalStateException("Module registration happened before server start!"); }
+        VOLUME_CATEGORIES = new VolumeConfig(path.resolve("categories.properties"));
+
         AudioEvents.POST_PLAY_GOAT_HORN.register(VolumeCategoryHooks::onPostPlay);
         AudioEvents.POST_PLAY_MUSIC_DISC.register(VolumeCategoryHooks::onPostPlay);
         AudioEvents.POST_PLAY_NOTE_BLOCK.register(VolumeCategoryHooks::onPostPlay);

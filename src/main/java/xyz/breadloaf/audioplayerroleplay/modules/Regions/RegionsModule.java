@@ -6,6 +6,7 @@ import de.maxhenkel.audioplayer.api.data.AudioData;
 import de.maxhenkel.audioplayer.api.data.ModuleKey;
 import de.maxhenkel.audioplayer.api.events.AudioEvents;
 import de.maxhenkel.configbuilder.ConfigBuilder;
+import net.minecraft.commands.synchronization.SingletonArgumentInfo;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.MutableComponent;
 import net.minecraft.resources.ResourceLocation;
@@ -13,12 +14,12 @@ import net.minecraft.world.item.ItemStack;
 import org.apache.logging.log4j.Logger;
 import org.jetbrains.annotations.Nullable;
 import xyz.breadloaf.audioplayerroleplay.AudioPlayerRoleplayMod;
-import xyz.breadloaf.audioplayerroleplay.config.ServerConfig;
 import xyz.breadloaf.audioplayerroleplay.modules.BaseModuleCommand;
+import xyz.breadloaf.audioplayerroleplay.modules.CustomVolumeCategory.CategoryManager;
+import xyz.breadloaf.audioplayerroleplay.modules.CustomVolumeCategory.VolumeCategoryArgumentType;
 import xyz.breadloaf.audioplayerroleplay.modules.IUserFacingModule;
 
-import static xyz.breadloaf.audioplayerroleplay.AudioPlayerRoleplayMod.getModuleConfigFolder;
-import static xyz.breadloaf.audioplayerroleplay.AudioPlayerRoleplayMod.getModuleLogger;
+import static xyz.breadloaf.audioplayerroleplay.AudioPlayerRoleplayMod.*;
 
 
 public class RegionsModule implements IUserFacingModule  {
@@ -75,12 +76,12 @@ public class RegionsModule implements IUserFacingModule  {
 
     @Override
     public void earlyRegistrationHook() {
-
+        net.fabricmc.fabric.api.command.v2.ArgumentTypeRegistry.registerArgumentType(ResourceLocation.fromNamespaceAndPath(MODID,ID), RegionArgumentType.class, SingletonArgumentInfo.contextFree(RegionArgumentType::region));
     }
 
     @Override
     public void registerArgumentTypes(ArgumentTypeRegistry argumentTypeRegistry) {
-
+        argumentTypeRegistry.register(Region.class, RegionArgumentType::region);
     }
 
     @Override

@@ -10,6 +10,7 @@ import net.minecraft.core.BlockPos;
 import net.minecraft.network.chat.Component;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.item.ItemStack;
+import xyz.breadloaf.audioplayerroleplay.position.Position;
 import xyz.breadloaf.audioplayerroleplay.modules.BaseModuleCommand;
 
 @Command({"roleplay","regions"})
@@ -35,6 +36,13 @@ public class RegionCommands extends BaseModuleCommand {
 
         context.getSource().sendSuccess(() -> Component.literal("Test module applied"), false);
     }
+
+    @Command("test")
+    public void test(CommandContext<CommandSourceStack> context, Region region) throws CommandSyntaxException {
+
+
+    }
+
 
     @Override
     public String getModuleKey() {

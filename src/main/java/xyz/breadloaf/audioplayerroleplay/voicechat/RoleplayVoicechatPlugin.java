@@ -22,8 +22,8 @@ public class RoleplayVoicechatPlugin implements VoicechatPlugin {
     public static VoicechatApi voicechatApi;
     @Nullable
     public static VoicechatServerApi voicechatServerApi;
-    @Nullable
-    public static VolumeCategory test;
+//    @Nullable
+//    public static VolumeCategory test;
 
     @Override
     public String getPluginId() {
@@ -42,18 +42,17 @@ public class RoleplayVoicechatPlugin implements VoicechatPlugin {
 
     private void onServerStarted(VoicechatServerStartedEvent event) {
         voicechatServerApi = event.getVoicechat();
-        test = voicechatServerApi.volumeCategoryBuilder()
-                .setId(TEST_CATEGORY_ID)
-                .setName("Test")
-                .setDescription("A test category")
-                .setIcon(getIcon("test_category.png"))
-                .build();
 
-        AudioPlayerApi audioPlayerApi = AudioPlayerApi.instance();
+//        test = voicechatServerApi.volumeCategoryBuilder()
+//                .setId(TEST_CATEGORY_ID)
+//                .setName("Test")
+//                .setDescription("A test category")
+//                .setIcon(getIcon("test_category.png"))
+//                .build();
 
-        ModuleManager.registerAllModuleEvents(audioPlayerApi);
 
-        voicechatServerApi.registerVolumeCategory(test);
+
+        //voicechatServerApi.registerVolumeCategory(test);
     }
 
     @Nullable

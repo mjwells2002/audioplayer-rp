@@ -2,9 +2,11 @@ package xyz.breadloaf.audioplayerroleplay.modules.Regions;
 
 import com.google.gson.JsonArray;
 import com.google.gson.JsonElement;
+import com.google.gson.JsonPrimitive;
 import de.maxhenkel.voicechat.api.Position;
 import net.minecraft.core.BlockPos;
 import net.minecraft.world.phys.Vec3;
+import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 public class Region {
@@ -14,6 +16,7 @@ public class Region {
     int maxX;
     int maxY;
     int maxZ;
+    @Nullable String id = null;
 
     Region(int minX, int minY, int minZ, int maxX, int maxY, int maxZ) {
         this.minX = minX;
@@ -32,6 +35,10 @@ public class Region {
         this.maxX = Math.max(pos1.getX(), pos2.getX());
         this.maxY = Math.max(pos1.getY(), pos2.getY());
         this.maxZ = Math.max(pos1.getZ(), pos2.getZ());
+    }
+
+    public Region(@NotNull String id) {
+        this.id = id;
     }
 
     public boolean containsPosition(Position position) {
@@ -64,20 +71,24 @@ public class Region {
     }
 
     public JsonElement toJson() {
-        JsonArray jsonArray = new JsonArray();
-        jsonArray.add(minX);
-        jsonArray.add(minY);
-        jsonArray.add(minZ);
-        jsonArray.add(maxX);
-        jsonArray.add(maxY);
-        jsonArray.add(maxZ);
-        return jsonArray;
+        if (this.id == null) {
+            JsonArray jsonArray = new JsonArray();
+            jsonArray.add(minX);
+            jsonArray.add(minY);
+            jsonArray.add(minZ);
+            jsonArray.add(maxX);
+            jsonArray.add(maxY);
+            jsonArray.add(maxZ);
+            return jsonArray;
+        } else {
+            return new JsonPrimitive(this.id);
+        }
     }
 
     @Nullable
-    public static Region fromJson(JsonElement array) {
-        if (array.isJsonArray()) {
-            JsonArray jsonArray = array.getAsJsonArray();
+    public static Region fromJson(JsonElement element) {
+        if (element.isJsonArray()) {
+            JsonArray jsonArray = element.getAsJsonArray();
             if (jsonArray.size() == 6) {
                 return new Region(jsonArray.get(0).getAsInt(),
                         jsonArray.get(1).getAsInt(),
@@ -86,6 +97,9 @@ public class Region {
                         jsonArray.get(4).getAsInt(),
                         jsonArray.get(5).getAsInt());
             }
+        } else if (element.isJsonPrimitive()) {
+            JsonPrimitive jsonPrimitive = element.getAsJsonPrimitive();
+            return new Region(jsonPrimitive.getAsString());
         }
         return null;
     }

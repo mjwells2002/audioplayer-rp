@@ -10,6 +10,10 @@ repositories {
 
 }
 
+loom {
+    accessWidenerPath = file("src/main/resources/audioplayer_roleplay.accesswidener")
+}
+
 dependencies {
     include(modImplementation("maven.modrinth:admiral:${admiral_version}+fabric"))
     modImplementation "me.lucko:fabric-permissions-api:${fabric_permission_api_version}"
