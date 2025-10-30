@@ -46,7 +46,7 @@ public class RandomizedPlayback implements IUserFacingModule {
         MutableComponent info = Component.empty();
         RandomizedSoundModule data = audioData.getModule(RANDOM_PLAYBACK_MODULE).orElse(null);
         if (data != null) {
-            for (UUID uuid : data.soundIds) {
+            for (UUID uuid : data.getSoundIds()) {
                 info.append(ModuleUtils.getInfoComponent(uuid));
                 info.append(Component.literal("\n"));
             }
