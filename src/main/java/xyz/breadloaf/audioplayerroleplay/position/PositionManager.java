@@ -39,10 +39,10 @@ public class PositionManager {
     public static void save() {
         if (filePath != null) {
             AudioPlayerRoleplayMod.SAVE_WORKER.submit(() -> {
+                if (!filePath.toFile().exists()) {
+                    filePath.toFile().mkdirs();
+                }
                 try (BufferedWriter bufferedWriter = new BufferedWriter(new FileWriter(filePath.toFile()))) {
-                    if (!filePath.toFile().exists()) {
-                        filePath.toFile().mkdirs();
-                    }
                     bufferedWriter.write(new Gson().toJson(POSITIONS));
                     bufferedWriter.flush();
                 } catch (IOException e) {
