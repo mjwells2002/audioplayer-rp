@@ -10,11 +10,13 @@ import net.minecraft.world.phys.Vec3;
 
 import java.util.Collection;
 import java.util.UUID;
+import java.util.concurrent.atomic.AtomicLong;
 
 import static xyz.breadloaf.audioplayerroleplay.modules.StaticPlayback.StaticPlayback.STATIC_PLAYBACK_MODULE;
 import static xyz.breadloaf.audioplayerroleplay.voicechat.RoleplayVoicechatPlugin.voicechatServerApi;
 
 public class StaticPlaybackHooks {
+
     public static void onPlayback(PlayEvent event) {
         AudioPlayerApi audioPlayerApi = AudioPlayerApi.instance();
         if (event.getData().getModule(STATIC_PLAYBACK_MODULE).isPresent()) {
@@ -38,8 +40,15 @@ public class StaticPlaybackHooks {
 
                 Vec3 location = event.getPosition();
 
+                AtomicLong lastUpdate = new AtomicLong();
+
                 channelReference.setOnChannelUpdate((channel) -> {
-                    //TODO: this is bad, dont do this every update
+                    long time = System.currentTimeMillis();
+                    // Only update channel targets every 200ms
+                    if (time - lastUpdate.get() < 200L) {
+                        return;
+                    }
+                    lastUpdate.set(time);
                     channel.clearTargets();
                     Collection<ServerPlayer> players = voicechatServerApi.getPlayersInRange(voicechatServerApi.fromServerLevel(event.getLevel()), voicechatServerApi.createPosition(location.x, location.y, location.z), range);
                     players.forEach(serverPlayer -> {
@@ -54,6 +63,6 @@ public class StaticPlaybackHooks {
                 }
             }
         }
-
     }
+
 }

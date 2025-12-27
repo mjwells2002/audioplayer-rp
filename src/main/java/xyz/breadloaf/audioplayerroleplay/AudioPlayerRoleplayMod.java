@@ -11,7 +11,7 @@ import net.minecraft.server.MinecraftServer;
 import net.minecraft.world.level.storage.LevelResource;
 import org.jetbrains.annotations.Nullable;
 import xyz.breadloaf.audioplayerroleplay.commands.PositionCommands;
-import xyz.breadloaf.audioplayerroleplay.commands.TestCommands;
+import xyz.breadloaf.audioplayerroleplay.commands.InfoCommands;
 import xyz.breadloaf.audioplayerroleplay.position.Position;
 import xyz.breadloaf.audioplayerroleplay.position.PositionArgumentType;
 import xyz.breadloaf.audioplayerroleplay.config.ServerConfig;
@@ -76,7 +76,7 @@ public class AudioPlayerRoleplayMod implements ModInitializer {
                 }
             }
             builder.addCommandClasses(
-                    TestCommands.class,
+                    InfoCommands.class,
                     PositionCommands.class
             );
             builder.setPermissionManager(RoleplayPermissionManager.INSTANCE);

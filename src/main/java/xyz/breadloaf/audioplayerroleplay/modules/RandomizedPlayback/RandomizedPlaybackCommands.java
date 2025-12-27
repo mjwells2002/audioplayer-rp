@@ -3,6 +3,7 @@ package xyz.breadloaf.audioplayerroleplay.modules.RandomizedPlayback;
 import com.mojang.brigadier.context.CommandContext;
 import com.mojang.brigadier.exceptions.CommandSyntaxException;
 import de.maxhenkel.admiral.annotations.Command;
+import de.maxhenkel.admiral.annotations.Name;
 import de.maxhenkel.admiral.annotations.RequiresPermission;
 import de.maxhenkel.audioplayer.api.AudioPlayerApi;
 import de.maxhenkel.audioplayer.api.data.AudioData;
@@ -21,7 +22,7 @@ public class RandomizedPlaybackCommands extends BaseModuleCommand {
 
     @RequiresPermission("audioplayer_roleplay.test")
     @Command("enable")
-    public void applyTest(CommandContext<CommandSourceStack> context) throws CommandSyntaxException {
+    public void enable(CommandContext<CommandSourceStack> context) throws CommandSyntaxException {
         ServerPlayer player = context.getSource().getPlayerOrException();
         ItemStack heldItem = player.getMainHandItem();
         if (heldItem.isEmpty()) {
@@ -36,12 +37,12 @@ public class RandomizedPlaybackCommands extends BaseModuleCommand {
 
         audioData.setModule(RANDOM_PLAYBACK_MODULE, new RandomizedSoundModule(audioData.getSoundId()));
         audioData.saveToItem(heldItem);
-        context.getSource().sendSuccess(() -> Component.literal("Test module applied"), false);
+        context.getSource().sendSuccess(() -> Component.literal("Enabled randomized playback for item"), false);
     }
 
     @RequiresPermission("audioplayer_roleplay.test")
     @Command("append")
-    public void applyTest2(CommandContext<CommandSourceStack> context, UUID uuid) throws CommandSyntaxException {
+    public void append(CommandContext<CommandSourceStack> context, @Name("id") UUID uuid) throws CommandSyntaxException {
         ServerPlayer player = context.getSource().getPlayerOrException();
         ItemStack heldItem = player.getMainHandItem();
         if (heldItem.isEmpty()) {
@@ -56,13 +57,15 @@ public class RandomizedPlaybackCommands extends BaseModuleCommand {
 
         RandomizedSoundModule soundModule = audioData.getModule(RANDOM_PLAYBACK_MODULE).orElse(null);
 
-        if (soundModule != null) {
-            soundModule.addUUID(uuid);
+        if (soundModule == null) {
+            soundModule = new RandomizedSoundModule(audioData.getSoundId());
+            audioData.setModule(RANDOM_PLAYBACK_MODULE, soundModule);
         }
+        soundModule.addUUID(uuid);
 
         audioData.saveToItem(heldItem);
 
-        context.getSource().sendSuccess(() -> Component.literal("Test module applied"), false);
+        context.getSource().sendSuccess(() -> Component.literal("Added sound to randomized playback for item"), false);
     }
 
     @Override

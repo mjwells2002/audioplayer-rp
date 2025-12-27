@@ -7,18 +7,23 @@ import de.maxhenkel.audioplayer.api.data.AudioDataModule;
 
 
 import java.util.ArrayList;
+import java.util.List;
 import java.util.UUID;
 import java.util.concurrent.ThreadLocalRandom;
 
 public class RandomizedSoundModule implements AudioDataModule {
-    ArrayList<UUID> soundIds = new ArrayList<>();
+
+    private final ArrayList<UUID> soundIds = new ArrayList<>();
 
     public RandomizedSoundModule() {
-
     }
 
     public RandomizedSoundModule(UUID u1) {
         soundIds.add(u1);
+    }
+
+    public RandomizedSoundModule(List<UUID> uuids) {
+        soundIds.addAll(uuids);
     }
 
     @Override
@@ -56,4 +61,7 @@ public class RandomizedSoundModule implements AudioDataModule {
         soundIds.add(uuid);
     }
 
+    public ArrayList<UUID> getSoundIds() {
+        return soundIds;
+    }
 }

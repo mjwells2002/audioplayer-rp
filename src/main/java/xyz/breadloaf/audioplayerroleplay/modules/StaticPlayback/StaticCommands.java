@@ -32,7 +32,7 @@ public class StaticCommands extends BaseModuleCommand {
 
         audioData.setModule(STATIC_PLAYBACK_MODULE, new StaticPlaybackModule());
         audioData.saveToItem(heldItem);
-        context.getSource().sendSuccess(() -> Component.literal("Test module applied"), false);
+        context.getSource().sendSuccess(() -> Component.literal("Made audio static for item"), false);
     }
 
     @Override
