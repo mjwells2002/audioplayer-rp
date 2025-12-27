@@ -98,6 +98,7 @@ public class AudioPlayerRoleplayMod implements ModInitializer {
 
     private void onServerStopping(MinecraftServer minecraftServer) {
         PositionManager.save();
+        PositionManager.clear();
         MINECRAFT_SERVER = null;
     }
 

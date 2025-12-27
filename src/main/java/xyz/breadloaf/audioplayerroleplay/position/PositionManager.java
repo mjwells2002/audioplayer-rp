@@ -49,6 +49,10 @@ public class PositionManager {
         }
     }
 
+    public static void clear() {
+        POSITIONS.id_to_location.clear();
+    }
+
     public static Set<String> getKeys() {
         return POSITIONS.id_to_location.keySet();
     }
