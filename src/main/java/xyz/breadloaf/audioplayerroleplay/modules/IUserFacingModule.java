@@ -8,6 +8,8 @@ import net.minecraft.network.chat.MutableComponent;
 import net.minecraft.world.item.ItemStack;
 import org.jetbrains.annotations.Nullable;
 
+import java.util.Collection;
+
 public interface IUserFacingModule {
     String getID();
 
@@ -25,9 +27,15 @@ public interface IUserFacingModule {
 
     @Nullable Class<? extends BaseModuleCommand> getCommandClass();
 
+    @Nullable Collection<Class<?>> getAdditionalCommandClasses();
+
     void earlyRegistrationHook();
 
     void registerArgumentTypes(ArgumentTypeRegistry argumentTypeRegistry);
+
+    void serverStartingHook();
+
+    void serverStoppingHook();
 
     @Nullable ModuleKey<?> getModuleKey();
 }

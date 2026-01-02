@@ -12,6 +12,7 @@ import net.minecraft.world.level.storage.LevelResource;
 import org.jetbrains.annotations.Nullable;
 import xyz.breadloaf.audioplayerroleplay.commands.PositionCommands;
 import xyz.breadloaf.audioplayerroleplay.commands.InfoCommands;
+import xyz.breadloaf.audioplayerroleplay.modules.Regions.RegionManager;
 import xyz.breadloaf.audioplayerroleplay.position.Position;
 import xyz.breadloaf.audioplayerroleplay.position.PositionArgumentType;
 import xyz.breadloaf.audioplayerroleplay.config.ServerConfig;
@@ -25,6 +26,7 @@ import net.fabricmc.loader.api.FabricLoader;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import xyz.breadloaf.audioplayerroleplay.position.PositionManager;
+import xyz.breadloaf.audioplayerroleplay.voicechat.RoleplayVoicechatPlugin;
 
 import java.nio.file.Path;
 import java.util.concurrent.ExecutorService;
@@ -74,6 +76,9 @@ public class AudioPlayerRoleplayMod implements ModInitializer {
                 if (userFacingModule.getCommandClass() != null) {
                     builder.addCommandClasses(userFacingModule.getCommandClass());
                 }
+                if (userFacingModule.getAdditionalCommandClasses() != null) {
+                    builder.addCommandClasses(userFacingModule.getAdditionalCommandClasses());
+                }
             }
             builder.addCommandClasses(
                     InfoCommands.class,
@@ -92,11 +97,19 @@ public class AudioPlayerRoleplayMod implements ModInitializer {
         LOGGER.info("SERVER STARTED");
         MINECRAFT_SERVER = minecraftServer;
         PositionManager.load();
-        AudioPlayerApi audioPlayerApi = AudioPlayerApi.instance();
-        ModuleManager.registerAllModuleEvents(audioPlayerApi);
+        for (IUserFacingModule userFacingModule : ModuleManager.ENABLED_MODULES.values()) {
+            userFacingModule.serverStartingHook();
+        }
+        if (RoleplayVoicechatPlugin.voicechatServerApi != null) {
+            AudioPlayerApi audioPlayerApi = AudioPlayerApi.instance();
+            ModuleManager.registerAllModuleEvents(audioPlayerApi);
+        }
     }
 
     private void onServerStopping(MinecraftServer minecraftServer) {
+        for (IUserFacingModule userFacingModule : ModuleManager.ENABLED_MODULES.values()) {
+            userFacingModule.serverStoppingHook();
+        }
         PositionManager.save();
         PositionManager.clear();
         MINECRAFT_SERVER = null;

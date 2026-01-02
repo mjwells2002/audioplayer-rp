@@ -16,6 +16,7 @@ import xyz.breadloaf.audioplayerroleplay.modules.BaseModuleCommand;
 import xyz.breadloaf.audioplayerroleplay.modules.IUserFacingModule;
 
 import java.nio.file.Path;
+import java.util.Collection;
 
 import static xyz.breadloaf.audioplayerroleplay.AudioPlayerRoleplayMod.*;
 
@@ -80,6 +81,21 @@ public class CustomVolumeCategory implements IUserFacingModule {
     @Override
     public Class<? extends BaseModuleCommand> getCommandClass() {
         return VolumeCategoryCommands.class;
+    }
+
+    @Override
+    public @Nullable Collection<Class<?>> getAdditionalCommandClasses() {
+        return null;
+    }
+
+    @Override
+    public void serverStartingHook() {
+
+    }
+
+    @Override
+    public void serverStoppingHook() {
+
     }
 
     @Override

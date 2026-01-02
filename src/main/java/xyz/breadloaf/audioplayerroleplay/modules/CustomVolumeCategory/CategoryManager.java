@@ -40,20 +40,24 @@ public class CategoryManager {
             int[][] icon = null;
             String iconPath = volumeCategoryData.icon.get();
             if (iconPath != null && !iconPath.isEmpty()) {
-                File path = AudioPlayerRoleplayMod.getModuleConfigFolder(CustomVolumeCategory.ID).resolve(iconPath).toFile();
-                if (path.exists()) {
-                    try {
-                        BufferedImage img = ImageIO.read(path);
-                        if (img.getWidth() != 16 || img.getHeight() != 16) {
-                            CustomVolumeCategory.LOGGER.error("Ignoring icon image for id: {}, invalid dimensions", volumeCategoryData.id);
-                            continue;
+                if (AudioPlayerRoleplayMod.getModuleDataFolder(CustomVolumeCategory.ID) != null) {
+                    File path = AudioPlayerRoleplayMod.getModuleDataFolder(CustomVolumeCategory.ID).resolve(iconPath).toFile();
+                    if (path.exists()) {
+                        try {
+                            BufferedImage img = ImageIO.read(path);
+                            if (img.getWidth() != 16 || img.getHeight() != 16) {
+                                CustomVolumeCategory.LOGGER.error("Ignoring icon image for id: {}, invalid dimensions", volumeCategoryData.id);
+                                continue;
+                            }
+                            icon = RoleplayVoicechatPlugin.getImageData(img);
+                        } catch (IOException e) {
+                            CustomVolumeCategory.LOGGER.error("Ignoring icon image for id: {}, failed to read file", volumeCategoryData.id);
                         }
-                        icon = RoleplayVoicechatPlugin.getImageData(img);
-                    } catch (IOException e) {
-                        CustomVolumeCategory.LOGGER.error("Ignoring icon image for id: {}, failed to read file", volumeCategoryData.id);
+                    } else {
+                        CustomVolumeCategory.LOGGER.error("Ignoring icon image for id: {}, file does not exist", volumeCategoryData.id);
                     }
                 } else {
-                    CustomVolumeCategory.LOGGER.error("Ignoring icon image for id: {}, file does not exist", volumeCategoryData.id);
+                    CustomVolumeCategory.LOGGER.error("Attempted to load image before initialization complete");
                 }
             }
             UserVolumeCategory category = CATEGORIES.get(volumeCategoryData.id);

@@ -3,6 +3,7 @@ package xyz.breadloaf.audioplayerroleplay.modules.Regions;
 import com.mojang.brigadier.context.CommandContext;
 import com.mojang.brigadier.exceptions.CommandSyntaxException;
 import de.maxhenkel.admiral.annotations.Command;
+import de.maxhenkel.admiral.annotations.Name;
 import de.maxhenkel.audioplayer.api.AudioPlayerApi;
 import de.maxhenkel.audioplayer.api.data.AudioData;
 import net.minecraft.commands.CommandSourceStack;
@@ -16,7 +17,16 @@ import xyz.breadloaf.audioplayerroleplay.modules.BaseModuleCommand;
 public class RegionCommands extends BaseModuleCommand {
 
     @Command("apply")
-    public void region(CommandContext<CommandSourceStack> context, BlockPos p1, BlockPos p2) throws CommandSyntaxException {
+    public void applyAnonymous(CommandContext<CommandSourceStack> context, @Name("pos 1") BlockPos p1, @Name("pos 2") BlockPos p2) throws CommandSyntaxException {
+        doApply(context, new Region(p1, p2));
+    }
+
+    @Command("apply")
+    public void applyNamed(CommandContext<CommandSourceStack> context, @Name("region") Region region) throws CommandSyntaxException {
+        doApply(context, region);
+    }
+
+    private static void doApply(CommandContext<CommandSourceStack> context, Region region) throws CommandSyntaxException {
         ServerPlayer player = context.getSource().getPlayerOrException();
         ItemStack heldItem = player.getMainHandItem();
         if (heldItem.isEmpty()) {
@@ -31,20 +41,16 @@ public class RegionCommands extends BaseModuleCommand {
             return;
         }
 
-        audioData.setModule(RegionsModule.REGIONS_DATA_MODULE, new RegionDataModule(p1, p2));
+        audioData.setModule(RegionsModule.REGIONS_DATA_MODULE, new RegionDataModule(region));
         audioData.saveToItem(heldItem);
 
         context.getSource().sendSuccess(() -> Component.literal("Test module applied"), false);
     }
 
-    @Command("test")
-    public void test(CommandContext<CommandSourceStack> context, Region region) throws CommandSyntaxException {
-
-    }
-
-
     @Override
     public String getModuleKey() {
         return RegionsModule.ID;
     }
+
+
 }

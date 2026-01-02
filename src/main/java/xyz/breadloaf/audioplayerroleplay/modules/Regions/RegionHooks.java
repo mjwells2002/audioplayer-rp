@@ -26,8 +26,10 @@ public class RegionHooks {
         if (regionDataModule != null) {
             Region region = regionDataModule.region;
             if (region.isNearbyEnoughToPlay(event.getPosition())) {
-                //TODO: data that makes this automatic
                 event.setDistance((float) (region.getMaxDistanceTo(event.getPosition()) + 1));
+            } else {
+                //TODO: this *should* cancel the event but dont have an api for that
+                event.setDistance(0f);
             }
         }
     }

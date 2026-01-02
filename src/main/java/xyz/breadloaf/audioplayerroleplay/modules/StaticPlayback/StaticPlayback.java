@@ -14,6 +14,8 @@ import xyz.breadloaf.audioplayerroleplay.AudioPlayerRoleplayMod;
 import xyz.breadloaf.audioplayerroleplay.modules.BaseModuleCommand;
 import xyz.breadloaf.audioplayerroleplay.modules.IUserFacingModule;
 
+import java.util.Collection;
+
 public class StaticPlayback implements IUserFacingModule {
 
     public static ModuleKey<StaticPlaybackModule> STATIC_PLAYBACK_MODULE;
@@ -64,6 +66,21 @@ public class StaticPlayback implements IUserFacingModule {
     @Override
     public Class<? extends BaseModuleCommand> getCommandClass() {
         return StaticCommands.class;
+    }
+
+    @Override
+    public @Nullable Collection<Class<?>> getAdditionalCommandClasses() {
+        return null;
+    }
+
+    @Override
+    public void serverStartingHook() {
+
+    }
+
+    @Override
+    public void serverStoppingHook() {
+
     }
 
     @Override

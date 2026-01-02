@@ -11,6 +11,7 @@ import net.minecraft.commands.SharedSuggestionProvider;
 import net.minecraft.network.chat.Component;
 import xyz.breadloaf.audioplayerroleplay.modules.CustomVolumeCategory.CategoryManager;
 
+import java.util.List;
 import java.util.concurrent.CompletableFuture;
 
 
@@ -24,32 +25,32 @@ public class RegionArgumentType implements ArgumentType<Region> {
 
     @Override
     public Region parse(StringReader reader) throws CommandSyntaxException {
-        try {
-            int argBeginning = reader.getCursor();
-            if (!reader.canRead()) {
-                reader.skip();
-            }
-
-            while (reader.canRead() && (Character.isLetter(reader.peek()) || reader.peek() == '_')) {
-                reader.skip();
-            }
-
-            String argString = reader.getString().substring(argBeginning, reader.getCursor());
-
-            RegionsModule.LOGGER.info("parsed argument as string, {}", argString);
-
-
-            return new Region(0, 0, 0, 0, 0, 0);
-        } catch (Exception e) {
-            RegionsModule.LOGGER.error(e);
-            e.printStackTrace();
-            throw e;
+        int argBeginning = reader.getCursor();
+        if (!reader.canRead()) {
+            reader.skip();
         }
 
+        while (reader.canRead() && (Character.isLetter(reader.peek()) || reader.peek() == '_')) {
+            reader.skip();
+        }
+
+        String argString = reader.getString().substring(argBeginning, reader.getCursor());
+
+        if (RegionManager.REGIONS != null) {
+            boolean regionExists = RegionManager.REGIONS.id_to_minmax.containsKey(argString);
+            if (!regionExists) {
+                throw INVALID_REGION.createWithContext(reader, argString);
+            }
+        }
+
+        return new Region(argString);
     }
 
     @Override
     public <S> CompletableFuture<Suggestions> listSuggestions(CommandContext<S> context, SuggestionsBuilder builder) {
-        return SharedSuggestionProvider.suggest(CategoryManager.CATEGORIES.keySet(), builder);
+        if (RegionManager.REGIONS != null) {
+            SharedSuggestionProvider.suggest(RegionManager.REGIONS.id_to_minmax.keySet(), builder);
+        }
+        return SharedSuggestionProvider.suggest(List.of(""), builder);
     }
 }

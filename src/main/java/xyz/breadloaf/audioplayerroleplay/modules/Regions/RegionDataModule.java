@@ -12,9 +12,10 @@ public class RegionDataModule implements AudioDataModule {
 
     }
 
-    public RegionDataModule(BlockPos pos1, BlockPos pos2) {
-        this.region = new Region(pos1, pos2);
+    public RegionDataModule(Region region) {
+        this.region = region;
     }
+
 
     @Override
     public void load(JsonObject jsonObject) throws Exception {

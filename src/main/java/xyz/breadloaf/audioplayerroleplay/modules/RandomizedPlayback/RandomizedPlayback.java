@@ -15,6 +15,8 @@ import xyz.breadloaf.audioplayerroleplay.modules.BaseModuleCommand;
 import xyz.breadloaf.audioplayerroleplay.modules.IUserFacingModule;
 import xyz.breadloaf.audioplayerroleplay.modules.ModuleUtils;
 
+import java.util.Collection;
+import java.util.List;
 import java.util.UUID;
 
 public class RandomizedPlayback implements IUserFacingModule {
@@ -76,7 +78,22 @@ public class RandomizedPlayback implements IUserFacingModule {
     }
 
     @Override
+    public @Nullable Collection<Class<?>> getAdditionalCommandClasses() {
+        return null;
+    }
+
+    @Override
     public void earlyRegistrationHook() {
+
+    }
+
+    @Override
+    public void serverStartingHook() {
+
+    }
+
+    @Override
+    public void serverStoppingHook() {
 
     }
 

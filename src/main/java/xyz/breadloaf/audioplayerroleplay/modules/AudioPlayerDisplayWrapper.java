@@ -9,6 +9,9 @@ import net.minecraft.network.chat.MutableComponent;
 import net.minecraft.world.item.ItemStack;
 import org.jetbrains.annotations.Nullable;
 
+import java.util.Collection;
+import java.util.List;
+
 public class AudioPlayerDisplayWrapper implements IUserFacingModule {
     @Override
     public String getID() {
@@ -57,12 +60,27 @@ public class AudioPlayerDisplayWrapper implements IUserFacingModule {
     }
 
     @Override
+    public @Nullable Collection<Class<?>> getAdditionalCommandClasses() {
+        return null;
+    }
+
+    @Override
     public void earlyRegistrationHook() {
 
     }
 
     @Override
     public void registerArgumentTypes(ArgumentTypeRegistry argumentTypeRegistry) {
+
+    }
+
+    @Override
+    public void serverStartingHook() {
+
+    }
+
+    @Override
+    public void serverStoppingHook() {
 
     }
 

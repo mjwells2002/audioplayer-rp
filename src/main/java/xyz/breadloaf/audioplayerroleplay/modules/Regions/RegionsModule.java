@@ -17,6 +17,9 @@ import xyz.breadloaf.audioplayerroleplay.AudioPlayerRoleplayMod;
 import xyz.breadloaf.audioplayerroleplay.modules.BaseModuleCommand;
 import xyz.breadloaf.audioplayerroleplay.modules.IUserFacingModule;
 
+import java.util.Collection;
+import java.util.List;
+
 import static xyz.breadloaf.audioplayerroleplay.AudioPlayerRoleplayMod.*;
 
 public class RegionsModule implements IUserFacingModule {
@@ -51,6 +54,11 @@ public class RegionsModule implements IUserFacingModule {
 
     @Override
     public @Nullable MutableComponent itemSpecificInfo(ItemStack itemStack, AudioData audioData) {
+        RegionDataModule regionDataModule = audioData.getModule(REGIONS_DATA_MODULE).orElse(null);
+        if (regionDataModule != null) {
+            Region region = regionDataModule.region;
+            return region.chatComponent();
+        }
         return null;
     }
 
@@ -72,6 +80,21 @@ public class RegionsModule implements IUserFacingModule {
     @Override
     public Class<? extends BaseModuleCommand> getCommandClass() {
         return RegionCommands.class;
+    }
+
+    @Override
+    public @Nullable Collection<Class<?>> getAdditionalCommandClasses() {
+        return List.of(NamedRegionCommands.class);
+    }
+
+    @Override
+    public void serverStartingHook() {
+        RegionManager.load();
+    }
+
+    @Override
+    public void serverStoppingHook() {
+        RegionManager.save();
     }
 
     @Override
