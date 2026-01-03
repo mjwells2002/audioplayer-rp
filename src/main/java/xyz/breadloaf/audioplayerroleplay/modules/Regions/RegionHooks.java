@@ -4,6 +4,7 @@ import de.maxhenkel.audioplayer.api.ChannelReference;
 import de.maxhenkel.audioplayer.api.events.GetDistanceEvent;
 import de.maxhenkel.audioplayer.api.events.PostPlayEvent;
 import de.maxhenkel.voicechat.api.audiochannel.AudioChannel;
+import net.minecraft.network.chat.Component;
 
 import static xyz.breadloaf.audioplayerroleplay.modules.Regions.RegionsModule.REGIONS_DATA_MODULE;
 
@@ -16,7 +17,12 @@ public class RegionHooks {
                 ChannelReference<? extends AudioChannel> audioChannelChannelReference = event.getChannel();
                 audioChannelChannelReference.getChannel().setFilter(serverPlayer -> region.containsPosition(serverPlayer.getPosition()));
             } else {
-                RegionsModule.LOGGER.warn("ignoring region for playback");
+                if (event.getPlayer() != null) {
+                    event.getPlayer().displayClientMessage(Component.literal("Too far away from region to play!"), true);
+                } else {
+                    RegionsModule.LOGGER.warn("Ignoring region for playback, source is too far outside of region");
+                }
+                event.getChannel().stopPlaying();
             }
         }
     }
@@ -28,7 +34,6 @@ public class RegionHooks {
             if (region.isNearbyEnoughToPlay(event.getPosition())) {
                 event.setDistance((float) (region.getMaxDistanceTo(event.getPosition()) + 1));
             } else {
-                //TODO: this *should* cancel the event but dont have an api for that
                 event.setDistance(0f);
             }
         }
