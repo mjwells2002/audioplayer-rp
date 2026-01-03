@@ -99,12 +99,12 @@ public class RegionsModule implements IUserFacingModule {
 
     @Override
     public void earlyRegistrationHook() {
-        net.fabricmc.fabric.api.command.v2.ArgumentTypeRegistry.registerArgumentType(ResourceLocation.fromNamespaceAndPath(MODID, ID), RegionArgumentType.class, SingletonArgumentInfo.contextFree(RegionArgumentType::region));
+
     }
 
     @Override
     public void registerArgumentTypes(ArgumentTypeRegistry argumentTypeRegistry) {
-        argumentTypeRegistry.register(Region.class, RegionArgumentType::region);
+        argumentTypeRegistry.register(Region.class, new RegionArugment.Supplier(), new RegionArugment.TypeConverter());
     }
 
     @Override

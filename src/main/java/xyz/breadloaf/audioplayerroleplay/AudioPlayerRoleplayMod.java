@@ -2,19 +2,15 @@ package xyz.breadloaf.audioplayerroleplay;
 
 import de.maxhenkel.admiral.MinecraftAdmiral;
 import de.maxhenkel.audioplayer.api.AudioPlayerApi;
-import net.fabricmc.fabric.api.command.v2.ArgumentTypeRegistry;
 import net.fabricmc.fabric.api.event.lifecycle.v1.ServerLifecycleEvents;
 import net.minecraft.commands.CommandSourceStack;
-import net.minecraft.commands.synchronization.SingletonArgumentInfo;
-import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.world.level.storage.LevelResource;
 import org.jetbrains.annotations.Nullable;
 import xyz.breadloaf.audioplayerroleplay.commands.PositionCommands;
 import xyz.breadloaf.audioplayerroleplay.commands.InfoCommands;
-import xyz.breadloaf.audioplayerroleplay.modules.Regions.RegionManager;
 import xyz.breadloaf.audioplayerroleplay.position.Position;
-import xyz.breadloaf.audioplayerroleplay.position.PositionArgumentType;
+import xyz.breadloaf.audioplayerroleplay.position.PositionArgument;
 import xyz.breadloaf.audioplayerroleplay.config.ServerConfig;
 import xyz.breadloaf.audioplayerroleplay.modules.IUserFacingModule;
 import xyz.breadloaf.audioplayerroleplay.modules.ModuleManager;
@@ -55,14 +51,18 @@ public class AudioPlayerRoleplayMod implements ModInitializer {
 
     @Override
     public void onInitialize() {
+        LOGGER.info("Initializing AudioPlayerRoleplayMod on Thread {}", Thread.currentThread().getName());
         SERVER_CONFIG = ConfigBuilder.builder(ServerConfig::new).path(getModConfigFolder().resolve("roleplay-server.properties")).build();
         ModuleManager.configLoadedHook();
 
+        LOGGER.info("Config loaded and modules initialized");
+        //ArgumentTypeRegistry.registerArgumentType(ResourceLocation.fromNamespaceAndPath(MODID, "pos"), PositionArgumentType.class, SingletonArgumentInfo.contextFree(PositionArgumentType::region));
+        LOGGER.info("Arguments Registered");
+
         for (IUserFacingModule userFacingModule : ModuleManager.ENABLED_MODULES.values()) {
             userFacingModule.earlyRegistrationHook();
+            LOGGER.info("Early registration completed for module: {}", userFacingModule.getID());
         }
-
-        ArgumentTypeRegistry.registerArgumentType(ResourceLocation.fromNamespaceAndPath(MODID, "pos"), PositionArgumentType.class, SingletonArgumentInfo.contextFree(PositionArgumentType::region));
 
         CommandRegistrationCallback.EVENT.register((dispatcher, registryAccess, environment) -> {
             MinecraftAdmiral.Builder<CommandSourceStack> builder = MinecraftAdmiral.builder(dispatcher, registryAccess);
@@ -70,7 +70,7 @@ public class AudioPlayerRoleplayMod implements ModInitializer {
                 for (IUserFacingModule userFacingModule : ModuleManager.ENABLED_MODULES.values()) {
                     userFacingModule.registerArgumentTypes(argumentTypeRegistry);
                 }
-                argumentTypeRegistry.register(Position.class, PositionArgumentType::region);
+                argumentTypeRegistry.register(Position.class, new PositionArgument.PositionArgumentSupplier(), new PositionArgument.PositionArgumentTypeConverter());
             });
             for (IUserFacingModule userFacingModule : ModuleManager.ENABLED_MODULES.values()) {
                 if (userFacingModule.getCommandClass() != null) {

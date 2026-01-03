@@ -100,12 +100,11 @@ public class CustomVolumeCategory implements IUserFacingModule {
 
     @Override
     public void earlyRegistrationHook() {
-        net.fabricmc.fabric.api.command.v2.ArgumentTypeRegistry.registerArgumentType(ResourceLocation.fromNamespaceAndPath(MODID, ID), VolumeCategoryArgumentType.class, SingletonArgumentInfo.contextFree(VolumeCategoryArgumentType::volumeCategory));
     }
 
     @Override
     public void registerArgumentTypes(ArgumentTypeRegistry argumentTypeRegistry) {
-        argumentTypeRegistry.register(CategoryManager.UserVolumeCategory.class, VolumeCategoryArgumentType::volumeCategory);
+        argumentTypeRegistry.register(CategoryManager.UserVolumeCategory.class, new VolumeCategory.Supplier(), new VolumeCategory.TypeConverter());
     }
 
     @Override
