@@ -11,6 +11,11 @@ and [Simple Voice Chat](https://modrinth.com/mod/simple-voice-chat).
 Features are defined as modules, that can be disabled or enabled in the server config, 
 modules can be stacked in any valid combination, currently there are 4 modules.
 
+# Warning 
+
+Currently, permissions are unsupported and all commands are available to everybody.
+This mod is intended for use on servers with a trusted community.
+
 # Commands
 
 - `/roleplay info` - Shows all information for all modules on the held item 
