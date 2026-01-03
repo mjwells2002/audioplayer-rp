@@ -70,7 +70,7 @@ public class AudioPlayerRoleplayMod implements ModInitializer {
                 for (IUserFacingModule userFacingModule : ModuleManager.ENABLED_MODULES.values()) {
                     userFacingModule.registerArgumentTypes(argumentTypeRegistry);
                 }
-                argumentTypeRegistry.register(Position.class, new PositionArgument.PositionArgumentSupplier(), new PositionArgument.PositionArgumentTypeConverter());
+                //argumentTypeRegistry.register(Position.class, new PositionArgument.PositionArgumentSupplier(), new PositionArgument.PositionArgumentTypeConverter());
             });
             for (IUserFacingModule userFacingModule : ModuleManager.ENABLED_MODULES.values()) {
                 if (userFacingModule.getCommandClass() != null) {
@@ -81,10 +81,10 @@ public class AudioPlayerRoleplayMod implements ModInitializer {
                 }
             }
             builder.addCommandClasses(
-                    InfoCommands.class,
-                    PositionCommands.class
+                    InfoCommands.class
+                    //PositionCommands.class
             );
-            builder.setPermissionManager(RoleplayPermissionManager.INSTANCE);
+            //builder.setPermissionManager(RoleplayPermissionManager.INSTANCE);
             builder.build();
         });
 
@@ -94,7 +94,7 @@ public class AudioPlayerRoleplayMod implements ModInitializer {
     }
 
     private void onServerStarted(MinecraftServer minecraftServer) {
-        LOGGER.info("SERVER STARTED");
+        //LOGGER.info("SERVER STARTED");
         MINECRAFT_SERVER = minecraftServer;
         PositionManager.load();
         for (IUserFacingModule userFacingModule : ModuleManager.ENABLED_MODULES.values()) {
