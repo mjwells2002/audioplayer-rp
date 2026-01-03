@@ -42,12 +42,13 @@ public abstract class BaseModuleCommand {
         if (audioData.getModule(key).isPresent()) {
             audioData.removeModule(key);
             audioData.saveToItem(heldItem);
-            context.getSource().sendSuccess(() -> Component.literal("Removed module ").append(moduleInterface.moduleName()).append(" from item").withStyle(ChatFormatting.GREEN), false);
+            context.getSource().sendSuccess(() -> Component.literal("Removed module ").append(moduleInterface.moduleName()).append(" from item").withStyle(ChatFormatting.AQUA), false);
         } else {
             context.getSource().sendFailure(Component.literal("Module not present on this item"));
         }
     }
 
+    @Command
     @Command("info")
     public void info(CommandContext<CommandSourceStack> context) throws CommandSyntaxException {
         ServerPlayer player = context.getSource().getPlayerOrException();
@@ -79,7 +80,7 @@ public abstract class BaseModuleCommand {
         if (key == null || audioData.getModule(key).isPresent()) {
             MutableComponent specificInfo = moduleInterface.itemSpecificInfo(heldItem, audioData);
             if (specificInfo != null) {
-                context.getSource().sendSuccess(() -> Component.literal("Item Specific Info").withStyle(ChatFormatting.GREEN), false);
+                context.getSource().sendSuccess(() -> Component.literal("Item Specific Info").withStyle(ChatFormatting.AQUA), false);
                 context.getSource().sendSuccess(() -> specificInfo, false);
             }
         }

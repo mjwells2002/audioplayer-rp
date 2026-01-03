@@ -74,9 +74,13 @@ public class CategoryManager {
                 isModified = true;
             }
             if (isModified) {
+                String desc = volumeCategoryData.description.get();
+                if (desc != null && desc.isEmpty()) {
+                    desc = null;
+                }
                 VolumeCategory volumeCategory = RoleplayVoicechatPlugin.voicechatServerApi.volumeCategoryBuilder()
                         .setId("arp_" + volumeCategoryData.id)
-                        .setDescription(volumeCategoryData.description.get())
+                        .setDescription(desc)
                         .setName(volumeCategoryData.name.get())
                         .setIcon(icon).build();
                 if (category != null) {

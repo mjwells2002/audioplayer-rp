@@ -6,6 +6,7 @@ import de.maxhenkel.admiral.annotations.Command;
 import de.maxhenkel.admiral.annotations.Name;
 import de.maxhenkel.audioplayer.api.AudioPlayerApi;
 import de.maxhenkel.audioplayer.api.data.AudioData;
+import net.minecraft.ChatFormatting;
 import net.minecraft.commands.CommandSourceStack;
 import net.minecraft.core.BlockPos;
 import net.minecraft.network.chat.Component;
@@ -44,7 +45,7 @@ public class RegionCommands extends BaseModuleCommand {
         audioData.setModule(RegionsModule.REGIONS_DATA_MODULE, new RegionDataModule(region));
         audioData.saveToItem(heldItem);
 
-        context.getSource().sendSuccess(() -> Component.literal("Test module applied"), false);
+        context.getSource().sendSuccess(() -> Component.literal("Applied region to item").withStyle(ChatFormatting.AQUA), false);
     }
 
     @Override

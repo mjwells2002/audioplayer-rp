@@ -3,8 +3,10 @@ package xyz.breadloaf.audioplayerroleplay.modules.CustomVolumeCategory;
 import com.mojang.brigadier.context.CommandContext;
 import com.mojang.brigadier.exceptions.CommandSyntaxException;
 import de.maxhenkel.admiral.annotations.Command;
+import de.maxhenkel.admiral.annotations.Name;
 import de.maxhenkel.audioplayer.api.AudioPlayerApi;
 import de.maxhenkel.audioplayer.api.data.AudioData;
+import net.minecraft.ChatFormatting;
 import net.minecraft.commands.CommandSourceStack;
 import net.minecraft.network.chat.Component;
 import net.minecraft.server.level.ServerPlayer;
@@ -15,7 +17,7 @@ import xyz.breadloaf.audioplayerroleplay.modules.BaseModuleCommand;
 public class VolumeCategoryCommands extends BaseModuleCommand {
 
     @Command("apply")
-    public void cvc(CommandContext<CommandSourceStack> context, CategoryManager.UserVolumeCategory volumeCategory) throws CommandSyntaxException {
+    public void apply(CommandContext<CommandSourceStack> context, @Name("Volume Category") CategoryManager.UserVolumeCategory volumeCategory) throws CommandSyntaxException {
         ServerPlayer player = context.getSource().getPlayerOrException();
         ItemStack heldItem = player.getMainHandItem();
         if (heldItem.isEmpty()) {
@@ -32,7 +34,7 @@ public class VolumeCategoryCommands extends BaseModuleCommand {
 
         audioData.setModule(CustomVolumeCategory.CUSTOM_VOLUME_CATEGORY_MODULE, new VolumeCategoryModule(volumeCategory.id));
         audioData.saveToItem(heldItem);
-        context.getSource().sendSuccess(() -> Component.literal("Custom volume category module applied, Category: ").append(CategoryManager.getChatComponentFor(volumeCategory.id)), false);
+        context.getSource().sendSuccess(() -> Component.literal("Custom volume category module applied, Category: ").append(CategoryManager.getChatComponentFor(volumeCategory.id).withStyle(ChatFormatting.AQUA)), false);
     }
 
     @Command("reload")
@@ -44,7 +46,7 @@ public class VolumeCategoryCommands extends BaseModuleCommand {
         if (reloadResult == VolumeConfig.ConfigReloadResult.ERRORS) {
             context.getSource().sendFailure(Component.literal("Errors logged while reloading config!, please check server console for more information"));
         } else if (reloadResult == VolumeConfig.ConfigReloadResult.WARNINGS_LOGGED) {
-            context.getSource().sendSuccess(() -> Component.literal("Warnings logged while reloading config, please check server console for more information"), false);
+            context.getSource().sendSuccess(() -> Component.literal("Reloaded categories from config; Warnings logged while reloading config, please check server console for more information"), false);
         } else {
             context.getSource().sendSuccess(() -> Component.literal("Reloaded categories from config!"), false);
         }
