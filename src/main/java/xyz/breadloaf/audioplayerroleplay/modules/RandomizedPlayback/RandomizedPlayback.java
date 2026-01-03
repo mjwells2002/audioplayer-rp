@@ -7,7 +7,7 @@ import de.maxhenkel.audioplayer.api.data.ModuleKey;
 import de.maxhenkel.audioplayer.api.events.AudioEvents;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.MutableComponent;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
 import net.minecraft.world.item.ItemStack;
 import org.jetbrains.annotations.Nullable;
 import xyz.breadloaf.audioplayerroleplay.AudioPlayerRoleplayMod;
@@ -30,7 +30,7 @@ public class RandomizedPlayback implements IUserFacingModule {
 
     @Override
     public String register(AudioPlayerApi audioPlayerApi) {
-        RANDOM_PLAYBACK_MODULE = audioPlayerApi.registerModuleType(ResourceLocation.fromNamespaceAndPath(AudioPlayerRoleplayMod.MODID, ID), RandomizedSoundModule::new);
+        RANDOM_PLAYBACK_MODULE = audioPlayerApi.registerModuleType(Identifier.fromNamespaceAndPath(AudioPlayerRoleplayMod.MODID, ID), RandomizedSoundModule::new);
 
         AudioEvents.GET_SOUND_ID.register(RandomizedPlaybackHooks::onGetSoundId);
 

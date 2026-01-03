@@ -32,7 +32,7 @@ public class RoleplayPermissionManager implements PermissionManager<CommandSourc
             if (stack.isPlayer()) {
                 return p.hasPermission(stack.getPlayer());
             }
-            return stack.hasPermission(2);
+            return stack.permissions().hasPermission(net.minecraft.server.permissions.Permissions.COMMANDS_MODERATOR);
         }
         return false;
     }
@@ -92,7 +92,7 @@ public class RoleplayPermissionManager implements PermissionManager<CommandSourc
                 case EVERYONE -> true;
                 case NOONE -> false;
                 case OPS ->
-                        player != null && player.hasPermissions(player.level().getServer().operatorUserPermissionLevel());
+                        player != null && player.permissions().hasPermission(net.minecraft.server.permissions.Permissions.COMMANDS_OWNER);
             };
         }
 

@@ -5,10 +5,9 @@ import de.maxhenkel.audioplayer.api.AudioPlayerApi;
 import de.maxhenkel.audioplayer.api.data.AudioData;
 import de.maxhenkel.audioplayer.api.data.ModuleKey;
 import de.maxhenkel.audioplayer.api.events.AudioEvents;
-import net.minecraft.commands.synchronization.SingletonArgumentInfo;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.MutableComponent;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
 import net.minecraft.world.item.ItemStack;
 import org.apache.logging.log4j.Logger;
 import org.jetbrains.annotations.Nullable;
@@ -43,7 +42,7 @@ public class CustomVolumeCategory implements IUserFacingModule {
         AudioEvents.POST_PLAY_MUSIC_DISC.register(VolumeCategoryHooks::onPostPlay);
         AudioEvents.POST_PLAY_NOTE_BLOCK.register(VolumeCategoryHooks::onPostPlay);
 
-        CUSTOM_VOLUME_CATEGORY_MODULE = audioPlayerApi.registerModuleType(ResourceLocation.fromNamespaceAndPath(MODID, ID), VolumeCategoryModule::new);
+        CUSTOM_VOLUME_CATEGORY_MODULE = audioPlayerApi.registerModuleType(Identifier.fromNamespaceAndPath(MODID, ID), VolumeCategoryModule::new);
 
         CategoryManager.reloadCategories();
         return ID;

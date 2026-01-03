@@ -7,7 +7,7 @@ import de.maxhenkel.audioplayer.api.data.ModuleKey;
 import de.maxhenkel.audioplayer.api.events.AudioEvents;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.MutableComponent;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
 import net.minecraft.world.item.ItemStack;
 import org.jetbrains.annotations.Nullable;
 import xyz.breadloaf.audioplayerroleplay.AudioPlayerRoleplayMod;
@@ -28,7 +28,7 @@ public class StaticPlayback implements IUserFacingModule {
 
     @Override
     public String register(AudioPlayerApi audioPlayerApi) {
-        STATIC_PLAYBACK_MODULE = audioPlayerApi.registerModuleType(ResourceLocation.fromNamespaceAndPath(AudioPlayerRoleplayMod.MODID, ID), StaticPlaybackModule::new);
+        STATIC_PLAYBACK_MODULE = audioPlayerApi.registerModuleType(Identifier.fromNamespaceAndPath(AudioPlayerRoleplayMod.MODID, ID), StaticPlaybackModule::new);
 
         AudioEvents.PLAY_NOTE_BLOCK.register(StaticPlaybackHooks::onPlayback);
         AudioEvents.PLAY_GOAT_HORN.register(StaticPlaybackHooks::onPlayback);
