@@ -21,7 +21,7 @@ import xyz.breadloaf.audioplayerroleplay.modules.StaticPlayback.StaticPlaybackMo
 import java.util.List;
 import java.util.UUID;
 
-@Mixin(value = ItemUpgrader.class, remap = false)
+@Mixin(value = ItemUpgrader.class)
 public class UpgradeMixin {
 
     @Unique
@@ -35,7 +35,7 @@ public class UpgradeMixin {
     @Final
     public static String CUSTOM_SOUND_STATIC;
 
-    @Inject(method = "upgradeRoleplayData(Lnet/minecraft/nbt/CompoundTag;Lde/maxhenkel/audioplayer/audioloader/AudioData;)V", at = @At("HEAD"))
+    @Inject(method = "upgradeRoleplayData(Lnet/minecraft/nbt/CompoundTag;Lde/maxhenkel/audioplayer/audioloader/AudioData;)V", at = @At("HEAD"), cancellable = true)
     private static void upgradeItem(CompoundTag tag, AudioData audioData, CallbackInfo ci) {
         List<UUID> randomSounds = tag.read(CUSTOM_SOUND_RANDOM, UUID_LIST_CODEC).orElse(null);
         if (randomSounds != null) {
@@ -45,9 +45,10 @@ public class UpgradeMixin {
         if (staticSound) {
             audioData.setModule(StaticPlayback.STATIC_PLAYBACK_MODULE, new StaticPlaybackModule());
         }
+        ci.cancel();
     }
 
-    @Inject(method = "upgradeRoleplayData(Lnet/minecraft/world/level/storage/ValueInput;Lde/maxhenkel/audioplayer/audioloader/AudioData;)V", at = @At("HEAD"))
+    @Inject(method = "upgradeRoleplayData(Lnet/minecraft/world/level/storage/ValueInput;Lde/maxhenkel/audioplayer/audioloader/AudioData;)V", at = @At("HEAD"), cancellable = true)
     private static void upgradeItem(ValueInput valueInput, AudioData audioData, CallbackInfo ci) {
         List<UUID> randomSounds = valueInput.read(CUSTOM_SOUND_RANDOM, UUID_LIST_CODEC).orElse(null);
         if (randomSounds != null) {
@@ -57,6 +58,7 @@ public class UpgradeMixin {
         if (staticSound) {
             audioData.setModule(StaticPlayback.STATIC_PLAYBACK_MODULE, new StaticPlaybackModule());
         }
+        ci.cancel();
     }
 
 }
