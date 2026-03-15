@@ -70,7 +70,8 @@ public class RoleplayPermissionManager implements PermissionManager<CommandSourc
         }
 
         private boolean checkFabricPermission(ServerPlayer player) {
-            TriState permissionValue = Permissions.getPermissionValue(player, permission);
+            //TODO Add back once permissions API is available for unobf minecraft again
+            TriState permissionValue = TriState.DEFAULT;//Permissions.getPermissionValue(player, permission);
             return switch (permissionValue) {
                 case DEFAULT -> type.hasPermission(player);
                 case TRUE -> true;
