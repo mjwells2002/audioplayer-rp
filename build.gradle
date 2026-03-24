@@ -24,9 +24,7 @@ dependencies {
     runtimeOnly "de.maxhenkel.voicechat:voicechat-api:${voicechat_api_version}:fabric-stub"
     runtimeOnly "maven.modrinth:simple-voice-chat:fabric-${voicechat_mod_version}"
 
-    //TODO Add back audioplayer modrinth import
-    implementation fileTree(dir: 'libs', include: ['*.jar'])
-    //implementation "maven.modrinth:audioplayer:fabric-${audioplayer_mod_version}"
+    implementation "maven.modrinth:audioplayer:fabric-${audioplayer_mod_version}"
 }
 
 processResources {
