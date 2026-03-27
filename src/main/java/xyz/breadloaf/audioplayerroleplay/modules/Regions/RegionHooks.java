@@ -18,7 +18,7 @@ public class RegionHooks {
                 audioChannelChannelReference.getChannel().setFilter(serverPlayer -> region.containsPosition(serverPlayer.getPosition()));
             } else {
                 if (event.getPlayer() != null) {
-                    event.getPlayer().displayClientMessage(Component.literal("Too far away from region to play!"), true);
+                    event.getPlayer().sendOverlayMessage(Component.literal("Too far away from region to play!"));
                 } else {
                     RegionsModule.LOGGER.warn("Ignoring region for playback, source is too far outside of region");
                 }

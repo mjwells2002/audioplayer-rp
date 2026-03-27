@@ -1,6 +1,6 @@
 plugins {
     id 'com.gradleup.shadow' version "${shadow_version}"
-    id 'fabric-loom' version "${fabric_loom_version}"
+    id 'net.fabricmc.fabric-loom' version "${fabric_loom_version}"
     id 'com.modrinth.minotaur' version "${minotaur_version}"
 }
 
@@ -15,14 +15,14 @@ loom {
 }
 
 dependencies {
-    include(modImplementation("maven.modrinth:admiral:${admiral_version}+fabric"))
-    modImplementation "me.lucko:fabric-permissions-api:${fabric_permission_api_version}"
+    include(implementation("maven.modrinth:admiral:${admiral_version}+fabric"))
+    implementation "me.lucko:fabric-permissions-api:${fabric_permission_api_version}"
 
     implementation "de.maxhenkel.voicechat:voicechat-api:${voicechat_api_version}"
-    modRuntimeOnly "de.maxhenkel.voicechat:voicechat-api:${voicechat_api_version}:fabric-stub"
-    modRuntimeOnly "maven.modrinth:simple-voice-chat:fabric-${voicechat_mod_version}"
+    runtimeOnly "de.maxhenkel.voicechat:voicechat-api:${voicechat_api_version}:fabric-stub"
+    runtimeOnly "maven.modrinth:simple-voice-chat:fabric-${voicechat_mod_version}"
 
-    modImplementation "maven.modrinth:audioplayer:fabric-${audioplayer_mod_version}"
+    implementation "maven.modrinth:audioplayer:fabric-${audioplayer_mod_version}"
 }
 
 processResources {
