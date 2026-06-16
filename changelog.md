@@ -1,1 +1,1 @@
-- Added support for 26.1.1 and 26.1.2
+- Added support for 26.2
