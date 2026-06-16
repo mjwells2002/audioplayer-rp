@@ -15,7 +15,9 @@ loom {
 }
 
 dependencies {
-    include(implementation("maven.modrinth:admiral:${admiral_version}+fabric"))
+    //TODO: change when admiral is fully released
+    //include(implementation("maven.modrinth:admiral:${admiral_version}+fabric"))
+    include(implementation("de.maxhenkel.admiral:admiral-fabric:${admiral_version}"))
     implementation "me.lucko:fabric-permissions-api:${fabric_permission_api_version}"
 
     implementation "de.maxhenkel.voicechat:voicechat-api:${voicechat_api_version}"
