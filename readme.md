@@ -40,9 +40,16 @@ This module allows you to have multiple sounds on one item, and the sound that i
 
 This will be automatically upgraded from AudioPlayer v1 randomized playback, starting with AudioPlayer 2.1.x.
 
+This also allows the creation of a playlist of sounds that you can reuse across multiple items.
+
 Commands:
-- `/roleplay randomized append` - Adds a sound to this item, additionally enabling randomized playback if needed
-- `/roleplay randomized enable` - Enables randomized playback, but does not add another sound
+- `/roleplay randomized append <sound_id>` - Adds a sound to this item, enabling randomized playback
+- `/roleplay randomized set <playlist_id>` - Sets the item to use a playlist of audio, enabling randomized playback
+- `/roleplay randomized playlist append <playlist_id> <sound_id>` - appends a sound to a playlist
+- `/roleplay randomized playlist create <playlist_id>` - create an empty playlist
+- `/roleplay randomized playlist import <folder> <playlist_id>` - import from the folder (within the audioplayer_uploads folder) directly to a playlist
+- `/roleplay randomized playlist list <playlist_id>` - list the sounds in a playlist
+- `/roleplay randomized playlist remove <playlist_id> <sound_id>` - remove a sound from a playlist
 
 ## Regions
 
@@ -54,9 +61,15 @@ You can also save a region as a "Named Region", and use it across multiple.
 By default, a region can be used from anywhere, 
 however there is a config option in the regions config file to allow a server owner to limit this.
 
+Regions support modes which controls how the audio is played, the mode is set on a per item basis, rather than a per-region basis.
+The currently available modes are:
+- CLIP - a rectangle that clips a much larger radius sphere that contains it
+- CLIP_MANUAL_RANGE - like clip, expect the range is not automatically set to cover the entire region, you can set it manually
+- FALLOFF - audio plays static (with no 3D audio direction) inside the region, and then with locationality pointing towards the region within the items range of the region
+
 Commands
-- `/roleplay regions apply <pos1> <pos2>` - Sets the region of this item to be between the supplied coordinates
-- `/roleplay regions apply <region>` - Sets the region to the supplied named region
+- `/roleplay regions apply <pos1> <pos2> <mode>` - Sets the region of this item to be between the supplied coordinates
+- `/roleplay regions apply <region> <mode>` - Sets the region to the supplied named region
 - `/roleplay regions named set <region> <pos1> <pos2>` - Creates or edits an existing named region (takes place instantly)
 - `/roleplay regions named list` - Lists all named regions on the server
 
