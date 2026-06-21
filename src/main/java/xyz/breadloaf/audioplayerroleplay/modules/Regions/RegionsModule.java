@@ -38,6 +38,9 @@ public class RegionsModule implements IUserFacingModule {
     @Override
     public String register(AudioPlayerApi audioPlayerApi) {
         AudioEvents.PLAY_NOTE_BLOCK.register(RegionHooks::onPlay);
+        AudioEvents.PLAY_GOAT_HORN.register(RegionHooks::onPlay);
+        AudioEvents.PLAY_MUSIC_DISC.register(RegionHooks::onPlay);
+
         AudioEvents.POST_PLAY_GOAT_HORN.register(RegionHooks::onPostPlay);
         AudioEvents.POST_PLAY_NOTE_BLOCK.register(RegionHooks::onPostPlay);
         AudioEvents.POST_PLAY_MUSIC_DISC.register(RegionHooks::onPostPlay);
@@ -50,8 +53,8 @@ public class RegionsModule implements IUserFacingModule {
 
     @Override
     public MutableComponent generalUsageInfo() {
-        return Component.literal("Modifies the item to play only within a set cube region, in CLIP mode this overrides the range option ")
-                .append(Component.literal("in FALLOFF mode this applies falloff within the range outside of the region"));
+        return Component.literal("Modifies the item to play only within a set cube region, in CLIP mode this overrides the range option but the location is respected, in CLIP_MANUAL_RANGE the range & location is respected but the falloff sphere is clipped to the region ")
+                .append(Component.literal("in FALLOFF mode this applies falloff within the range outside of the region ignoring location of the player"));
     }
 
     @Override

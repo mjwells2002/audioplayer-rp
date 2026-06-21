@@ -16,16 +16,16 @@ loom {
 
 dependencies {
     //TODO: change when admiral is fully released
-    //include(implementation("maven.modrinth:admiral:${admiral_version}+fabric"))
-    include(implementation("de.maxhenkel.admiral:admiral-fabric:${admiral_version}"))
+    include(implementation("maven.modrinth:admiral:${admiral_version}+fabric"))
+    //include(implementation("de.maxhenkel.admiral:admiral-fabric:${admiral_version}"))
     implementation "me.lucko:fabric-permissions-api:${fabric_permission_api_version}"
 
-    //implementation "de.maxhenkel.voicechat:voicechat-api:${voicechat_api_version}"
-    //runtimeOnly "de.maxhenkel.voicechat:voicechat-api:${voicechat_api_version}:fabric-stub"
-    //implementation "maven.modrinth:simple-voice-chat:fabric-${voicechat_mod_version}"
+    implementation "de.maxhenkel.voicechat:voicechat-api:${voicechat_api_version}"
+    runtimeOnly "de.maxhenkel.voicechat:voicechat-api:${voicechat_api_version}:fabric-stub"
+    implementation "maven.modrinth:simple-voice-chat:fabric-${voicechat_mod_version}"
 
-    //implementation "maven.modrinth:audioplayer:fabric-${audioplayer_mod_version}"
-    implementation(fileTree("libs"))
+    implementation "maven.modrinth:audioplayer:fabric-${audioplayer_mod_version}"
+    //implementation(fileTree("libs"))
 }
 
 processResources {

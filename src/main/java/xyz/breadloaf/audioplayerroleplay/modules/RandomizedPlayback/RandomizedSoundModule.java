@@ -36,6 +36,11 @@ public class RandomizedSoundModule implements AudioDataModule {
         soundIds.addAll(uuids);
     }
 
+    @Nullable
+    public String getId() {
+        return this.id;
+    }
+
     @Override
     public void load(JsonObject dataAccessor) throws Exception {
         soundIds.clear();

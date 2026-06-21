@@ -19,7 +19,7 @@ public class RegionHooks {
         if (regionDataModule != null) {
             Region region = regionDataModule.region;
             if (region.isNearbyEnoughToPlay(event.getPosition())) {
-                if (regionDataModule.regionMode == RegionMode.CLIP) {
+                if (regionDataModule.regionMode != RegionMode.FALLOFF) {
                     ChannelReference<? extends AudioChannel> audioChannelChannelReference = event.getChannel();
                     audioChannelChannelReference.getChannel().setFilter(serverPlayer -> region.containsPosition(serverPlayer.getPosition()));
                 }
@@ -36,7 +36,7 @@ public class RegionHooks {
 
     static void onGetDistance(GetDistanceEvent event) {
         RegionDataModule regionDataModule = event.getData().getModule(REGIONS_DATA_MODULE).orElse(null);
-        if (regionDataModule != null && event.getData().getRange() == null && regionDataModule.regionMode == RegionMode.CLIP) {
+        if (regionDataModule != null && regionDataModule.regionMode == RegionMode.CLIP) {
             Region region = regionDataModule.region;
             if (region.isNearbyEnoughToPlay(event.getPosition())) {
                 event.setDistance((float) (region.getMaxDistanceTo(event.getPosition()) + 1));

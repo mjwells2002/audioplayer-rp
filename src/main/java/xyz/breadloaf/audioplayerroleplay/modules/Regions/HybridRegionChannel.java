@@ -51,9 +51,6 @@ public class HybridRegionChannel implements AudioChannel {
             throw new IllegalStateException("THE UNIVERSE EXPLODED");
         }
         VoicechatServerApi serverApi = RoleplayVoicechatPlugin.voicechatServerApi;
-//        //TODO: EVIL CRIMES OF EVILNESS DONE HERE UNDO WHEN API UPDATED
-//        SoundPacket.Builder<StaticSoundPacketImpl.BuilderImpl, StaticSoundPacket> builder = new StaticSoundPacketImpl.BuilderImpl(this.id,this.id, opusData, seqno, this.category);
-//        LocationalSoundPacketImpl.BuilderImpl builderLoc = new LocationalSoundPacketImpl.BuilderImpl(this.id,this.id, opusData, seqno, this.category);
 
         locationalBuilder.opusEncodedData(opusData);
         locationalBuilder.sequenceNumber(seqno);

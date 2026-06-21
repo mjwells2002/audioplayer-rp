@@ -10,8 +10,8 @@ public class PlaylistFile {
     public HashMap<String, Playlist> playlists = new HashMap<>();
 
     public static class Playlist {
-        ArrayList<UUID> soundIds = new ArrayList<>();
-        String id;
+        public ArrayList<UUID> soundIds = new ArrayList<>();
+        public String id;
 
         public Playlist(String id) {
             this.id = id;

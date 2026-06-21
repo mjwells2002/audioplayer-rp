@@ -15,9 +15,8 @@ import xyz.breadloaf.audioplayerroleplay.modules.BaseModuleCommand;
 import xyz.breadloaf.audioplayerroleplay.modules.IUserFacingModule;
 import xyz.breadloaf.audioplayerroleplay.modules.ModuleUtils;
 import xyz.breadloaf.audioplayerroleplay.modules.RandomizedPlayback.argument.PlaylistArg;
-import xyz.breadloaf.audioplayerroleplay.modules.Regions.Region;
-import xyz.breadloaf.audioplayerroleplay.modules.Regions.RegionArugment;
-import xyz.breadloaf.audioplayerroleplay.modules.Regions.RegionManager;
+import xyz.breadloaf.audioplayerroleplay.modules.RandomizedPlayback.commands.PlaylistCommands;
+import xyz.breadloaf.audioplayerroleplay.modules.RandomizedPlayback.commands.RandomizedPlaybackCommands;
 
 import java.util.Collection;
 import java.util.List;
@@ -25,7 +24,7 @@ import java.util.UUID;
 
 public class RandomizedPlayback implements IUserFacingModule {
     public static ModuleKey<RandomizedSoundModule> RANDOM_PLAYBACK_MODULE;
-    static final String ID = "rng_playback";
+    public static final String ID = "rng_playback";
 
     @Override
     public String getID() {
@@ -52,9 +51,13 @@ public class RandomizedPlayback implements IUserFacingModule {
         MutableComponent info = Component.empty();
         RandomizedSoundModule data = audioData.getModule(RANDOM_PLAYBACK_MODULE).orElse(null);
         if (data != null) {
-            for (UUID uuid : data.getSoundIds()) {
-                info.append(ModuleUtils.getInfoComponent(uuid));
-                info.append(Component.literal("\n"));
+            if (data.getId() != null) {
+                info.append(Component.literal("Playlist: %s\n".formatted(data.getId())));
+            } else {
+                for (UUID uuid : data.getSoundIds()) {
+                    info.append(ModuleUtils.getInfoComponent(uuid));
+                    info.append(Component.literal("\n"));
+                }
             }
         }
         return info;
@@ -83,7 +86,7 @@ public class RandomizedPlayback implements IUserFacingModule {
 
     @Override
     public @Nullable Collection<Class<?>> getAdditionalCommandClasses() {
-        return null;
+        return List.of(PlaylistCommands.class);
     }
 
     @Override
