@@ -14,6 +14,10 @@ import xyz.breadloaf.audioplayerroleplay.AudioPlayerRoleplayMod;
 import xyz.breadloaf.audioplayerroleplay.modules.BaseModuleCommand;
 import xyz.breadloaf.audioplayerroleplay.modules.IUserFacingModule;
 import xyz.breadloaf.audioplayerroleplay.modules.ModuleUtils;
+import xyz.breadloaf.audioplayerroleplay.modules.RandomizedPlayback.argument.PlaylistArg;
+import xyz.breadloaf.audioplayerroleplay.modules.Regions.Region;
+import xyz.breadloaf.audioplayerroleplay.modules.Regions.RegionArugment;
+import xyz.breadloaf.audioplayerroleplay.modules.Regions.RegionManager;
 
 import java.util.Collection;
 import java.util.List;
@@ -89,16 +93,17 @@ public class RandomizedPlayback implements IUserFacingModule {
 
     @Override
     public void serverStartingHook() {
-
+        PlaylistManager.load();
     }
 
     @Override
     public void serverStoppingHook() {
-
+        PlaylistManager.save();
     }
 
     @Override
     public void registerArgumentTypes(ArgumentTypeRegistry argumentTypeRegistry) {
+        argumentTypeRegistry.register(PlaylistFile.Playlist.class, new PlaylistArg.Supplier(), new PlaylistArg.TypeConverter());
 
     }
 

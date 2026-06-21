@@ -13,9 +13,6 @@ import com.mojang.brigadier.suggestion.Suggestions;
 import com.mojang.brigadier.suggestion.SuggestionsBuilder;
 import de.maxhenkel.admiral.argumenttype.ArgumentTypeConverter;
 import de.maxhenkel.admiral.argumenttype.ArgumentTypeSupplier;
-import de.maxhenkel.audioplayer.AudioPlayerMod;
-import de.maxhenkel.audioplayer.audioloader.AudioStorageManager;
-import de.maxhenkel.audioplayer.command.ServerFileArgument;
 import net.minecraft.commands.CommandSourceStack;
 import net.minecraft.commands.Commands;
 import net.minecraft.commands.SharedSuggestionProvider;
@@ -42,7 +39,7 @@ public class PositionArgument {
         }
 
         public SuggestionProvider<CommandSourceStack> getSuggestionProvider() {
-            return new ServerFileArgument.ServerFileSuggestionProvider();
+            return new PositionArgumentSuggestionProvider();
         }
     }
 

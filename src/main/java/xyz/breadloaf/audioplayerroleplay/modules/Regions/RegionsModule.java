@@ -6,6 +6,7 @@ import de.maxhenkel.audioplayer.api.data.AudioData;
 import de.maxhenkel.audioplayer.api.data.ModuleKey;
 import de.maxhenkel.audioplayer.api.events.AudioEvents;
 import de.maxhenkel.configbuilder.ConfigBuilder;
+import net.minecraft.ChatFormatting;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.MutableComponent;
 import net.minecraft.resources.Identifier;
@@ -36,6 +37,7 @@ public class RegionsModule implements IUserFacingModule {
 
     @Override
     public String register(AudioPlayerApi audioPlayerApi) {
+        AudioEvents.PLAY_NOTE_BLOCK.register(RegionHooks::onPlay);
         AudioEvents.POST_PLAY_GOAT_HORN.register(RegionHooks::onPostPlay);
         AudioEvents.POST_PLAY_NOTE_BLOCK.register(RegionHooks::onPostPlay);
         AudioEvents.POST_PLAY_MUSIC_DISC.register(RegionHooks::onPostPlay);
@@ -48,7 +50,8 @@ public class RegionsModule implements IUserFacingModule {
 
     @Override
     public MutableComponent generalUsageInfo() {
-        return Component.literal("Modifies the item to play only within a set cube region, overriding the range option");
+        return Component.literal("Modifies the item to play only within a set cube region, in CLIP mode this overrides the range option ")
+                .append(Component.literal("in FALLOFF mode this applies falloff within the range outside of the region"));
     }
 
     @Override
@@ -56,7 +59,12 @@ public class RegionsModule implements IUserFacingModule {
         RegionDataModule regionDataModule = audioData.getModule(REGIONS_DATA_MODULE).orElse(null);
         if (regionDataModule != null) {
             Region region = regionDataModule.region;
-            return region.chatComponent();
+            MutableComponent mutableComponent = Component.empty();
+            mutableComponent.append(Component.literal("Mode: "));
+            mutableComponent.append(Component.literal(regionDataModule.regionMode.toString()).withStyle(ChatFormatting.AQUA));
+            mutableComponent.append(Component.literal("\n"));
+            mutableComponent.append(region.chatComponent());
+            return mutableComponent;
         }
         return null;
     }
@@ -104,6 +112,7 @@ public class RegionsModule implements IUserFacingModule {
     @Override
     public void registerArgumentTypes(ArgumentTypeRegistry argumentTypeRegistry) {
         argumentTypeRegistry.register(Region.class, new RegionArugment.Supplier(), new RegionArugment.TypeConverter());
+        argumentTypeRegistry.register(RegionMode.class, new RegionModeArugment.Supplier(), new RegionModeArugment.TypeConverter());
     }
 
     @Override

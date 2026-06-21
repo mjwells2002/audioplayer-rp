@@ -3,15 +3,25 @@ package xyz.breadloaf.audioplayerroleplay.modules.Regions;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonPrimitive;
+import de.maxhenkel.voicechat.Voicechat;
 import de.maxhenkel.voicechat.api.Position;
+import de.maxhenkel.voicechat.api.VoicechatConnection;
+import de.maxhenkel.voicechat.api.VoicechatServerApi;
 import net.minecraft.ChatFormatting;
 import net.minecraft.core.BlockPos;
+import net.minecraft.network.Connection;
 import net.minecraft.network.chat.ClickEvent;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.MutableComponent;
+import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.phys.Vec3;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
+import xyz.breadloaf.audioplayerroleplay.AudioPlayerRoleplayMod;
+import xyz.breadloaf.audioplayerroleplay.voicechat.RoleplayVoicechatPlugin;
+
+import java.util.ArrayList;
+import java.util.List;
 
 public class Region {
     int minX;
@@ -78,13 +88,61 @@ public class Region {
         this.maxZ = data[5];
     }
 
+
     public boolean containsPosition(Position position) {
+        return containsPosition(position, 0);
+    }
+
+    public boolean containsPosition(Position position, int inflate) {
         updatePosition();
+
         int x = (int) Math.floor(position.getX());
         int y = (int) Math.floor(position.getY());
         int z = (int) Math.floor(position.getZ());
+        return containsPosition(x,y,z,inflate);
+    }
 
-        return x >= this.minX && x <= this.maxX && y >= this.minY && y <= this.maxY && z >= this.minZ && z <= this.maxZ;
+    public boolean containsPosition(Vec3 position) {
+        return containsPosition(position, 0);
+    }
+
+    public boolean containsPosition(Vec3 position, int inflate) {
+        updatePosition();
+
+        int x = (int) Math.floor(position.x());
+        int y = (int) Math.floor(position.y());
+        int z = (int) Math.floor(position.z());
+        return containsPosition(x,y,z,inflate);
+    }
+
+    private boolean containsPosition(int x, int y, int z, int inflate) {
+        return     x >= this.minX - inflate && x <= this.maxX + inflate
+                && y >= this.minY - inflate && y <= this.maxY + inflate
+                && z >= this.minZ - inflate && z <= this.maxZ + inflate;
+    }
+
+
+    @Nullable
+    public ArrayList<PlayerPoint> getPlayersWithin(int inflate) {
+        if (AudioPlayerRoleplayMod.MINECRAFT_SERVER == null || RoleplayVoicechatPlugin.voicechatServerApi == null) {
+            return null;
+        }
+        ArrayList<PlayerPoint> nearbyPlayers = new ArrayList<>();
+        List<ServerPlayer> players = AudioPlayerRoleplayMod.MINECRAFT_SERVER.getPlayerList().getPlayers();
+
+        for (ServerPlayer player : players) {
+            if (player != null && containsPosition(player.position(),inflate)) {
+                VoicechatConnection connection = RoleplayVoicechatPlugin.voicechatServerApi.getConnectionOf(player.getUUID());
+                Vec3 pos = player.position();
+                double sourceX = Math.clamp(pos.x,this.minX,this.maxX);
+                double sourceY = Math.clamp(pos.y,this.minY,this.maxY);
+                double sourceZ = Math.clamp(pos.z,this.minZ,this.maxZ);
+                boolean inside = containsPosition((int) Math.floor(pos.x), (int) Math.floor(pos.y), (int) Math.floor(pos.z),0);
+                nearbyPlayers.add(new PlayerPoint(connection, RoleplayVoicechatPlugin.voicechatServerApi.createPosition(sourceX,sourceY,sourceZ), inside));
+            }
+        }
+
+        return nearbyPlayers;
     }
 
     public boolean isNearbyEnoughToPlay(Vec3 pos) {
@@ -170,4 +228,6 @@ public class Region {
         }
         return null;
     }
+
+    public record PlayerPoint (VoicechatConnection connection, Position sourcePos, boolean isInside) { }
 }

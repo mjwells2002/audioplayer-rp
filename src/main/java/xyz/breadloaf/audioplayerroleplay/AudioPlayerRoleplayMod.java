@@ -7,8 +7,11 @@ import net.minecraft.commands.CommandSourceStack;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.world.level.storage.LevelResource;
 import org.jetbrains.annotations.Nullable;
+import xyz.breadloaf.audioplayerroleplay.commands.CopyCommands;
 import xyz.breadloaf.audioplayerroleplay.commands.PositionCommands;
 import xyz.breadloaf.audioplayerroleplay.commands.InfoCommands;
+import xyz.breadloaf.audioplayerroleplay.modules.AudioFile;
+import xyz.breadloaf.audioplayerroleplay.modules.AudioFileArgument;
 import xyz.breadloaf.audioplayerroleplay.position.Position;
 import xyz.breadloaf.audioplayerroleplay.position.PositionArgument;
 import xyz.breadloaf.audioplayerroleplay.config.ServerConfig;
@@ -40,6 +43,13 @@ public class AudioPlayerRoleplayMod implements ModInitializer {
         t.setName("AudioPlayerRP-SaveWorker");
         return t;
     });
+    public static ExecutorService WORKER = Executors.newFixedThreadPool(1, r -> {
+        Thread t = new Thread(r);
+        t.setDaemon(true);
+        t.setName("AudioPlayerRP-Worker");
+        return t;
+    });
+
 
     @Nullable
     public static MinecraftServer MINECRAFT_SERVER = null;
@@ -71,6 +81,7 @@ public class AudioPlayerRoleplayMod implements ModInitializer {
                     userFacingModule.registerArgumentTypes(argumentTypeRegistry);
                 }
                 //argumentTypeRegistry.register(Position.class, new PositionArgument.PositionArgumentSupplier(), new PositionArgument.PositionArgumentTypeConverter());
+                argumentTypeRegistry.register(AudioFile.class, new AudioFileArgument.Supplier(), new AudioFileArgument.TypeConverter());
             });
             for (IUserFacingModule userFacingModule : ModuleManager.ENABLED_MODULES.values()) {
                 if (userFacingModule.getCommandClass() != null) {
@@ -81,7 +92,8 @@ public class AudioPlayerRoleplayMod implements ModInitializer {
                 }
             }
             builder.addCommandClasses(
-                    InfoCommands.class
+                    InfoCommands.class,
+                    CopyCommands.class
                     //PositionCommands.class
             );
             //builder.setPermissionManager(RoleplayPermissionManager.INSTANCE);

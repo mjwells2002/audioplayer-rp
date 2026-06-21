@@ -6,6 +6,7 @@ import de.maxhenkel.voicechat.api.VoicechatPlugin;
 import de.maxhenkel.voicechat.api.VoicechatServerApi;
 import de.maxhenkel.voicechat.api.events.EventRegistration;
 import de.maxhenkel.voicechat.api.events.VoicechatServerStartedEvent;
+import de.maxhenkel.voicechat.api.events.VoicechatServerStoppedEvent;
 import xyz.breadloaf.audioplayerroleplay.AudioPlayerRoleplayMod;
 import xyz.breadloaf.audioplayerroleplay.modules.ModuleManager;
 
@@ -31,6 +32,11 @@ public class RoleplayVoicechatPlugin implements VoicechatPlugin {
     @Override
     public void registerEvents(EventRegistration registration) {
         registration.registerEvent(VoicechatServerStartedEvent.class, this::onServerStarted);
+        registration.registerEvent(VoicechatServerStoppedEvent.class, this::onServerStopped);
+    }
+
+    private void onServerStopped(VoicechatServerStoppedEvent voicechatServerStoppedEvent) {
+        voicechatServerApi = null;
     }
 
     private void onServerStarted(VoicechatServerStartedEvent event) {

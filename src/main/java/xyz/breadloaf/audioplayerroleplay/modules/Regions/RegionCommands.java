@@ -18,16 +18,16 @@ import xyz.breadloaf.audioplayerroleplay.modules.BaseModuleCommand;
 public class RegionCommands extends BaseModuleCommand {
 
     @Command("apply")
-    public void applyAnonymous(CommandContext<CommandSourceStack> context, @Name("pos 1") BlockPos p1, @Name("pos 2") BlockPos p2) throws CommandSyntaxException {
-        doApply(context, new Region(p1, p2));
+    public void applyAnonymous(CommandContext<CommandSourceStack> context, @Name("pos 1") BlockPos p1, @Name("pos 2") BlockPos p2, @Name("mode") RegionMode mode) throws CommandSyntaxException {
+        doApply(context, new Region(p1, p2), mode);
     }
 
     @Command("apply")
-    public void applyNamed(CommandContext<CommandSourceStack> context, @Name("region") Region region) throws CommandSyntaxException {
-        doApply(context, region);
+    public void applyNamed(CommandContext<CommandSourceStack> context, @Name("region") Region region, @Name("mode") RegionMode mode) throws CommandSyntaxException {
+        doApply(context, region, mode);
     }
 
-    private static void doApply(CommandContext<CommandSourceStack> context, Region region) throws CommandSyntaxException {
+    private static void doApply(CommandContext<CommandSourceStack> context, Region region, RegionMode regionMode) throws CommandSyntaxException {
         ServerPlayer player = context.getSource().getPlayerOrException();
         ItemStack heldItem = player.getMainHandItem();
         if (heldItem.isEmpty()) {
@@ -42,7 +42,7 @@ public class RegionCommands extends BaseModuleCommand {
             return;
         }
 
-        audioData.setModule(RegionsModule.REGIONS_DATA_MODULE, new RegionDataModule(region));
+        audioData.setModule(RegionsModule.REGIONS_DATA_MODULE, new RegionDataModule(region, regionMode));
         audioData.saveToItem(heldItem);
 
         context.getSource().sendSuccess(() -> Component.literal("Applied region to item").withStyle(ChatFormatting.AQUA), false);
