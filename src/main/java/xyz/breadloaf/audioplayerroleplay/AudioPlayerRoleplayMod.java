@@ -2,6 +2,7 @@ package xyz.breadloaf.audioplayerroleplay;
 
 import de.maxhenkel.admiral.MinecraftAdmiral;
 import de.maxhenkel.audioplayer.api.AudioPlayerApi;
+import de.maxhenkel.audioplayer.api.data.AudioFileMetadata;
 import net.fabricmc.fabric.api.event.lifecycle.v1.ServerLifecycleEvents;
 import net.minecraft.commands.CommandSourceStack;
 import net.minecraft.server.MinecraftServer;
@@ -10,8 +11,6 @@ import org.jetbrains.annotations.Nullable;
 import xyz.breadloaf.audioplayerroleplay.commands.CopyCommands;
 import xyz.breadloaf.audioplayerroleplay.commands.PositionCommands;
 import xyz.breadloaf.audioplayerroleplay.commands.InfoCommands;
-import xyz.breadloaf.audioplayerroleplay.modules.AudioFile;
-import xyz.breadloaf.audioplayerroleplay.modules.AudioFileArgument;
 import xyz.breadloaf.audioplayerroleplay.position.Position;
 import xyz.breadloaf.audioplayerroleplay.position.PositionArgument;
 import xyz.breadloaf.audioplayerroleplay.config.ServerConfig;
@@ -81,7 +80,7 @@ public class AudioPlayerRoleplayMod implements ModInitializer {
                     userFacingModule.registerArgumentTypes(argumentTypeRegistry);
                 }
                 //argumentTypeRegistry.register(Position.class, new PositionArgument.PositionArgumentSupplier(), new PositionArgument.PositionArgumentTypeConverter());
-                argumentTypeRegistry.register(AudioFile.class, new AudioFileArgument.Supplier(), new AudioFileArgument.TypeConverter());
+                argumentTypeRegistry.register(AudioFileMetadata.class, AudioPlayerApi.instance().metadataArgumentTypeSupplier(), AudioPlayerApi.instance().metadataArgumentTypeConverter());
             });
             for (IUserFacingModule userFacingModule : ModuleManager.ENABLED_MODULES.values()) {
                 if (userFacingModule.getCommandClass() != null) {

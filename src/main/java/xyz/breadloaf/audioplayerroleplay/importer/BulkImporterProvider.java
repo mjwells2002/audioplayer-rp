@@ -3,6 +3,7 @@ package xyz.breadloaf.audioplayerroleplay.importer;
 import de.maxhenkel.audioplayer.api.AudioPlayerApi;
 import de.maxhenkel.audioplayer.api.importer.AudioImportInfo;
 import de.maxhenkel.audioplayer.api.importer.AudioImporter;
+import de.maxhenkel.audioplayer.api.importer.ImportedAudio;
 import net.minecraft.server.level.ServerPlayer;
 import org.apache.commons.io.IOUtils;
 import xyz.breadloaf.audioplayerroleplay.AudioPlayerRoleplayMod;
@@ -32,7 +33,7 @@ public class BulkImporterProvider implements AudioImporter {
             if (size > AudioPlayerApi.instance().getMaxUploadSize()) {
                 throw new NoSuchFileException("The file %s is too large".formatted(this.file.getName()));
             }
-            return new AudioImportInfo(this.soundId, getFileNameFromPath(this.file.toPath()));
+            return new AudioImportInfo(getFileNameFromPath(this.file.toPath()));
         } else {
             throw new NoSuchFileException("The file %s does not exist".formatted(this.file.getName()));
         }
@@ -52,14 +53,14 @@ public class BulkImporterProvider implements AudioImporter {
         return IOUtils.toByteArray(Files.newInputStream(this.file.toPath()));
     }
 
-    public void onPostprocess(@Nullable ServerPlayer player) throws Exception {
+    @Override
+    public void onPostprocess(@org.jspecify.annotations.Nullable ServerPlayer serverPlayer, ImportedAudio importedAudio) throws Exception {
         try {
             Files.delete(this.file.toPath());
             //player.sendSystemMessage(AudioPlayerApi.instance().createInfoMessage(soundId));
         } catch (Exception e) {
             AudioPlayerRoleplayMod.LOGGER.error("Failed to delete file {}", this.file, e);
         }
-
     }
 
     public String getHandlerName() {

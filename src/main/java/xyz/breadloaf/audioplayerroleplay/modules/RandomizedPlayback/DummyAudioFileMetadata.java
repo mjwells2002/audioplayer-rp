@@ -28,6 +28,11 @@ public record DummyAudioFileMetadata(UUID audioId, String fileName) implements A
     }
 
     @Override
+    public @Nullable String getSha256() {
+        return null;
+    }
+
+    @Override
     public @Nullable AudioFileOwner getOwner() {
         return null;
     }

@@ -6,7 +6,9 @@ import de.maxhenkel.admiral.annotations.Command;
 import de.maxhenkel.admiral.annotations.Name;
 import de.maxhenkel.admiral.annotations.OptionalArgument;
 import de.maxhenkel.audioplayer.api.AudioPlayerApi;
+import de.maxhenkel.audioplayer.api.data.AudioFileMetadata;
 import de.maxhenkel.audioplayer.api.importer.AudioImportInfo;
+import de.maxhenkel.audioplayer.api.importer.ImportedAudio;
 import net.minecraft.ChatFormatting;
 import net.minecraft.commands.CommandSourceStack;
 import net.minecraft.network.chat.ClickEvent;
@@ -16,7 +18,6 @@ import net.minecraft.server.level.ServerPlayer;
 import org.apache.commons.lang3.tuple.Pair;
 import xyz.breadloaf.audioplayerroleplay.AudioPlayerRoleplayMod;
 import xyz.breadloaf.audioplayerroleplay.importer.BulkImporterProvider;
-import xyz.breadloaf.audioplayerroleplay.modules.AudioFile;
 import xyz.breadloaf.audioplayerroleplay.modules.ModuleUtils;
 import xyz.breadloaf.audioplayerroleplay.modules.RandomizedPlayback.DummyAudioFileMetadata;
 import xyz.breadloaf.audioplayerroleplay.modules.RandomizedPlayback.PlaylistFile;
@@ -81,15 +82,15 @@ public class PlaylistCommands {
     }
 
     @Command("append")
-    public void append(CommandContext<CommandSourceStack> context, @Name("playlist_id") PlaylistFile.Playlist playlist, @Name("sound") AudioFile toAdd) {
-        playlist.append(toAdd.soundID());
+    public void append(CommandContext<CommandSourceStack> context, @Name("playlist_id") PlaylistFile.Playlist playlist, @Name("sound") AudioFileMetadata toAdd) {
+        playlist.append(toAdd.getAudioId());
         PlaylistManager.save();
         context.getSource().sendSuccess(() -> Component.literal("Added sound to playlist"), false);
     }
 
     @Command("remove")
-    public void remove(CommandContext<CommandSourceStack> context, @Name("playlist_id") PlaylistFile.Playlist playlist, @Name("sound") AudioFile toRemove) {
-        playlist.remove(toRemove.soundID());
+    public void remove(CommandContext<CommandSourceStack> context, @Name("playlist_id") PlaylistFile.Playlist playlist, @Name("sound") AudioFileMetadata toRemove) {
+        playlist.remove(toRemove.getAudioId());
         PlaylistManager.save();
         context.getSource().sendSuccess(() -> Component.literal("Removed sound from playlist"), false);
     }
@@ -105,17 +106,22 @@ public class PlaylistCommands {
     public void folderImport(CommandContext<CommandSourceStack> context, @Name("folder") String folder, @Name("playlist_id") PlaylistFile.Playlist playlist) throws CommandSyntaxException {
         ServerPlayer player = context.getSource().getPlayerOrException();
         Path importFolder = AudioPlayerApi.instance().getUploadFolder().resolve(folder);
-        ArrayList<Pair<CompletableFuture<AudioImportInfo>, String>> futures = new ArrayList<>();
-        for (File file : importFolder.toFile().listFiles()) {
+        ArrayList<Pair<CompletableFuture<ImportedAudio>, String>> futures = new ArrayList<>();
+        File[] files = importFolder.toFile().listFiles();
+        if (files == null) {
+            context.getSource().sendFailure(Component.literal("No audio files found to import"));
+            return;
+        }
+        for (File file : files) {
             futures.add(Pair.of(AudioPlayerApi.instance().importAudio(new BulkImporterProvider(file), player, false),file.getName()));
         }
         AudioPlayerRoleplayMod.WORKER.execute(() -> {
             int failedImport = 0;
             int impoprted = 0;
-            for (Pair<CompletableFuture<AudioImportInfo>, String> futurePair : futures) {
+            for (Pair<CompletableFuture<ImportedAudio>, String> futurePair : futures) {
                 player.sendOverlayMessage(Component.literal("Importing %d/%d files imported".formatted(failedImport+impoprted,futures.size())));
                 try {
-                    AudioImportInfo x = futurePair.getLeft().join();
+                    ImportedAudio x = futurePair.getLeft().join();
                     playlist.append(x.getAudioId());
                     impoprted++;
                 } catch (CompletionException e) {
