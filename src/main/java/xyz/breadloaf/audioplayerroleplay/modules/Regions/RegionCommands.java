@@ -27,6 +27,73 @@ public class RegionCommands extends BaseModuleCommand {
         doApply(context, region, mode);
     }
 
+    @Command("extend")
+    public void extendNamed(CommandContext<CommandSourceStack> context, @Name("region") Region region) throws CommandSyntaxException {
+        ServerPlayer player = context.getSource().getPlayerOrException();
+        ItemStack heldItem = player.getMainHandItem();
+        if (heldItem.isEmpty()) {
+            context.getSource().sendFailure(Component.literal("You are not holding an item"));
+            return;
+        }
+
+        AudioData audioData = AudioPlayerApi.instance().getAudioData(heldItem).orElse(null);
+
+        if (audioData == null) {
+            context.getSource().sendFailure(Component.literal("Item has no audio data"));
+            return;
+        }
+
+        RegionDataModule regionDataModule = audioData.getModule(RegionsModule.REGIONS_DATA_MODULE).orElse(null);
+
+        if (regionDataModule == null) {
+            context.getSource().sendFailure(Component.literal("No region on item to extend"));
+            return;
+        }
+
+        regionDataModule.extend(region);
+
+        audioData.setModule(RegionsModule.REGIONS_DATA_MODULE, regionDataModule);
+        audioData.saveToItem(heldItem);
+
+        context.getSource().sendSuccess(() -> Component.literal("Extended item regions").withStyle(ChatFormatting.AQUA), false);
+    }
+
+    @Command("shrink")
+    public void shrinkNamed(CommandContext<CommandSourceStack> context, @Name("region") Region region) throws CommandSyntaxException {
+        ServerPlayer player = context.getSource().getPlayerOrException();
+        ItemStack heldItem = player.getMainHandItem();
+        if (heldItem.isEmpty()) {
+            context.getSource().sendFailure(Component.literal("You are not holding an item"));
+            return;
+        }
+
+        AudioData audioData = AudioPlayerApi.instance().getAudioData(heldItem).orElse(null);
+
+        if (audioData == null) {
+            context.getSource().sendFailure(Component.literal("Item has no audio data"));
+            return;
+        }
+
+        RegionDataModule regionDataModule = audioData.getModule(RegionsModule.REGIONS_DATA_MODULE).orElse(null);
+
+        if (regionDataModule == null) {
+            context.getSource().sendFailure(Component.literal("No region on item to shrink"));
+            return;
+        }
+
+        if (regionDataModule.shrink(region)) {
+            audioData.setModule(RegionsModule.REGIONS_DATA_MODULE, regionDataModule);
+            audioData.saveToItem(heldItem);
+
+            context.getSource().sendSuccess(() -> Component.literal("Removed region " + region.id + " From item").withStyle(ChatFormatting.AQUA), false);
+        } else {
+            context.getSource().sendFailure(Component.literal(region.id + " is not a region on this item"));
+            return;
+        }
+
+
+    }
+
     private static void doApply(CommandContext<CommandSourceStack> context, Region region, RegionMode regionMode) throws CommandSyntaxException {
         ServerPlayer player = context.getSource().getPlayerOrException();
         ItemStack heldItem = player.getMainHandItem();

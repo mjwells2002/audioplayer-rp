@@ -3,6 +3,7 @@ package xyz.breadloaf.audioplayerroleplay.modules.RandomizedPlayback;
 import de.maxhenkel.admiral.argumenttype.ArgumentTypeRegistry;
 import de.maxhenkel.audioplayer.api.AudioPlayerApi;
 import de.maxhenkel.audioplayer.api.data.AudioData;
+import de.maxhenkel.audioplayer.api.data.AudioDataModule;
 import de.maxhenkel.audioplayer.api.data.ModuleKey;
 import de.maxhenkel.audioplayer.api.events.AudioEvents;
 import net.minecraft.network.chat.Component;
@@ -113,5 +114,10 @@ public class RandomizedPlayback implements IUserFacingModule {
     @Override
     public @Nullable ModuleKey<?> getModuleKey() {
         return RANDOM_PLAYBACK_MODULE;
+    }
+
+    @Override
+    public @Nullable AudioDataModule getBareDataModule() {
+        return new RandomizedSoundModule();
     }
 }

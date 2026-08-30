@@ -3,6 +3,7 @@ package xyz.breadloaf.audioplayerroleplay.modules.Regions;
 import de.maxhenkel.admiral.argumenttype.ArgumentTypeRegistry;
 import de.maxhenkel.audioplayer.api.AudioPlayerApi;
 import de.maxhenkel.audioplayer.api.data.AudioData;
+import de.maxhenkel.audioplayer.api.data.AudioDataModule;
 import de.maxhenkel.audioplayer.api.data.ModuleKey;
 import de.maxhenkel.audioplayer.api.events.AudioEvents;
 import de.maxhenkel.configbuilder.ConfigBuilder;
@@ -61,12 +62,13 @@ public class RegionsModule implements IUserFacingModule {
     public @Nullable MutableComponent itemSpecificInfo(ItemStack itemStack, AudioData audioData) {
         RegionDataModule regionDataModule = audioData.getModule(REGIONS_DATA_MODULE).orElse(null);
         if (regionDataModule != null) {
-            Region region = regionDataModule.region;
             MutableComponent mutableComponent = Component.empty();
             mutableComponent.append(Component.literal("Mode: "));
             mutableComponent.append(Component.literal(regionDataModule.regionMode.toString()).withStyle(ChatFormatting.AQUA));
-            mutableComponent.append(Component.literal("\n"));
-            mutableComponent.append(region.chatComponent());
+            for (Region region : regionDataModule.regions) {
+                mutableComponent.append(Component.literal("\n"));
+                mutableComponent.append(region.chatComponent());
+            }
             return mutableComponent;
         }
         return null;
@@ -121,5 +123,10 @@ public class RegionsModule implements IUserFacingModule {
     @Override
     public @Nullable ModuleKey<?> getModuleKey() {
         return REGIONS_DATA_MODULE;
+    }
+
+    @Override
+    public @Nullable AudioDataModule getBareDataModule() {
+        return new RegionDataModule();
     }
 }

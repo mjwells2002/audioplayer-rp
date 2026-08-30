@@ -3,6 +3,7 @@ package xyz.breadloaf.audioplayerroleplay.modules;
 import de.maxhenkel.admiral.argumenttype.ArgumentTypeRegistry;
 import de.maxhenkel.audioplayer.api.AudioPlayerApi;
 import de.maxhenkel.audioplayer.api.data.AudioData;
+import de.maxhenkel.audioplayer.api.data.AudioDataModule;
 import de.maxhenkel.audioplayer.api.data.ModuleKey;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.MutableComponent;
@@ -86,6 +87,11 @@ public class AudioPlayerDisplayWrapper implements IUserFacingModule {
 
     @Override
     public @Nullable ModuleKey<?> getModuleKey() {
+        return null;
+    }
+
+    @Override
+    public AudioDataModule getBareDataModule() {
         return null;
     }
 }

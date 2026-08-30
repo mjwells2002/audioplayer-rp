@@ -31,4 +31,9 @@ public class VolumeCategoryModule implements AudioDataModule {
     public void save(JsonObject jsonObject) throws Exception {
         jsonObject.addProperty("id", id);
     }
+
+    @Override
+    public String toString() {
+        return id;
+    }
 }

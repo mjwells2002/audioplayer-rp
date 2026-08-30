@@ -9,21 +9,18 @@ import net.minecraft.server.MinecraftServer;
 import net.minecraft.world.level.storage.LevelResource;
 import org.jetbrains.annotations.Nullable;
 import xyz.breadloaf.audioplayerroleplay.commands.CopyCommands;
-import xyz.breadloaf.audioplayerroleplay.commands.PositionCommands;
+import xyz.breadloaf.audioplayerroleplay.modules.VirtualLocations.position.PositionCommands;
 import xyz.breadloaf.audioplayerroleplay.commands.InfoCommands;
-import xyz.breadloaf.audioplayerroleplay.position.Position;
-import xyz.breadloaf.audioplayerroleplay.position.PositionArgument;
 import xyz.breadloaf.audioplayerroleplay.config.ServerConfig;
 import xyz.breadloaf.audioplayerroleplay.modules.IUserFacingModule;
 import xyz.breadloaf.audioplayerroleplay.modules.ModuleManager;
-import xyz.breadloaf.audioplayerroleplay.permission.RoleplayPermissionManager;
 import de.maxhenkel.configbuilder.ConfigBuilder;
 import net.fabricmc.api.ModInitializer;
 import net.fabricmc.fabric.api.command.v2.CommandRegistrationCallback;
 import net.fabricmc.loader.api.FabricLoader;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
-import xyz.breadloaf.audioplayerroleplay.position.PositionManager;
+import xyz.breadloaf.audioplayerroleplay.modules.VirtualLocations.position.PositionManager;
 import xyz.breadloaf.audioplayerroleplay.voicechat.RoleplayVoicechatPlugin;
 
 import java.nio.file.Path;
@@ -79,7 +76,6 @@ public class AudioPlayerRoleplayMod implements ModInitializer {
                 for (IUserFacingModule userFacingModule : ModuleManager.ENABLED_MODULES.values()) {
                     userFacingModule.registerArgumentTypes(argumentTypeRegistry);
                 }
-                //argumentTypeRegistry.register(Position.class, new PositionArgument.PositionArgumentSupplier(), new PositionArgument.PositionArgumentTypeConverter());
                 argumentTypeRegistry.register(AudioFileMetadata.class, AudioPlayerApi.instance().metadataArgumentTypeSupplier(), AudioPlayerApi.instance().metadataArgumentTypeConverter());
             });
             for (IUserFacingModule userFacingModule : ModuleManager.ENABLED_MODULES.values()) {
@@ -92,8 +88,8 @@ public class AudioPlayerRoleplayMod implements ModInitializer {
             }
             builder.addCommandClasses(
                     InfoCommands.class,
-                    CopyCommands.class
-                    //PositionCommands.class
+                    CopyCommands.class,
+                    PositionCommands.class
             );
             //builder.setPermissionManager(RoleplayPermissionManager.INSTANCE);
             builder.build();
@@ -122,7 +118,6 @@ public class AudioPlayerRoleplayMod implements ModInitializer {
             userFacingModule.serverStoppingHook();
         }
         PositionManager.save();
-        PositionManager.clear();
         MINECRAFT_SERVER = null;
     }
 

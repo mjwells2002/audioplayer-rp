@@ -35,18 +35,16 @@ public class RegionArugment {
     }
 
     public static class TypeConverter implements ArgumentTypeConverter<CommandSourceStack, String, Region> {
-        public Region convert(CommandContext<CommandSourceStack> commandContext, String s) throws CommandSyntaxException {
-            StringReader reader = new StringReader(s);
-            int argBeginning = reader.getCursor();
+        public Region convert(CommandContext<CommandSourceStack> commandContext, String argString) throws CommandSyntaxException {
+            StringReader reader = new StringReader(argString);
+
             if (!reader.canRead()) {
                 reader.skip();
             }
 
-            while (reader.canRead() && (Character.isLetter(reader.peek()) || reader.peek() == '_')) {
+            while (reader.canRead()) {
                 reader.skip();
             }
-
-            String argString = reader.getString().substring(argBeginning, reader.getCursor());
 
             if (RegionManager.REGIONS != null) {
                 boolean regionExists = RegionManager.REGIONS.id_to_minmax.containsKey(argString);

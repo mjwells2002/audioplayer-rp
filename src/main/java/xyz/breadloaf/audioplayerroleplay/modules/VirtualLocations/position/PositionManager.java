@@ -1,4 +1,4 @@
-package xyz.breadloaf.audioplayerroleplay.position;
+package xyz.breadloaf.audioplayerroleplay.modules.VirtualLocations.position;
 
 import com.google.gson.Gson;
 import net.minecraft.core.Vec3i;

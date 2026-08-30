@@ -96,4 +96,18 @@ public class RandomizedSoundModule implements AudioDataModule {
         }
         return soundIds;
     }
+
+    @Override
+    public String toString() {
+        StringBuilder sb = new StringBuilder();
+        sb.append("id: ");
+        sb.append(this.id);
+        sb.append("\n");
+        for (UUID id : soundIds) {
+            sb.append("sound_id: ");
+            sb.append(id);
+            sb.append("\n");
+        }
+        return sb.toString();
+    }
 }

@@ -3,6 +3,7 @@ package xyz.breadloaf.audioplayerroleplay.modules.CustomVolumeCategory;
 import de.maxhenkel.admiral.argumenttype.ArgumentTypeRegistry;
 import de.maxhenkel.audioplayer.api.AudioPlayerApi;
 import de.maxhenkel.audioplayer.api.data.AudioData;
+import de.maxhenkel.audioplayer.api.data.AudioDataModule;
 import de.maxhenkel.audioplayer.api.data.ModuleKey;
 import de.maxhenkel.audioplayer.api.events.AudioEvents;
 import net.minecraft.network.chat.Component;
@@ -109,5 +110,10 @@ public class CustomVolumeCategory implements IUserFacingModule {
     @Override
     public @Nullable ModuleKey<?> getModuleKey() {
         return CUSTOM_VOLUME_CATEGORY_MODULE;
+    }
+
+    @Override
+    public AudioDataModule getBareDataModule() {
+        return new VolumeCategoryModule();
     }
 }

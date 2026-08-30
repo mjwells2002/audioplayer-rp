@@ -6,6 +6,7 @@ import xyz.breadloaf.audioplayerroleplay.modules.CustomVolumeCategory.CustomVolu
 import xyz.breadloaf.audioplayerroleplay.modules.RandomizedPlayback.RandomizedPlayback;
 import xyz.breadloaf.audioplayerroleplay.modules.Regions.RegionsModule;
 import xyz.breadloaf.audioplayerroleplay.modules.StaticPlayback.StaticPlayback;
+import xyz.breadloaf.audioplayerroleplay.modules.VirtualLocations.VirtualLocations;
 
 import java.util.HashMap;
 
@@ -20,6 +21,7 @@ public class ModuleManager {
         registerModule(new RandomizedPlayback());
         registerModule(new StaticPlayback());
         registerModule(new AudioPlayerDisplayWrapper());
+        registerModule(new VirtualLocations());
     }
 
     public static void configLoadedHook() {

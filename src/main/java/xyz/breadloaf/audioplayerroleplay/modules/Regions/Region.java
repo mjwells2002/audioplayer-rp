@@ -13,6 +13,7 @@ import net.minecraft.network.Connection;
 import net.minecraft.network.chat.ClickEvent;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.MutableComponent;
+import net.minecraft.resources.Identifier;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.phys.Vec3;
 import org.jetbrains.annotations.NotNull;
@@ -21,6 +22,7 @@ import xyz.breadloaf.audioplayerroleplay.AudioPlayerRoleplayMod;
 import xyz.breadloaf.audioplayerroleplay.voicechat.RoleplayVoicechatPlugin;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 public class Region {
@@ -123,7 +125,7 @@ public class Region {
 
 
     @Nullable
-    public ArrayList<PlayerPoint> getPlayersWithin(int inflate) {
+    public ArrayList<PlayerPoint> getPlayersWithin(int inflate, Identifier dimension) {
         if (AudioPlayerRoleplayMod.MINECRAFT_SERVER == null || RoleplayVoicechatPlugin.voicechatServerApi == null) {
             return null;
         }
@@ -131,7 +133,7 @@ public class Region {
         List<ServerPlayer> players = AudioPlayerRoleplayMod.MINECRAFT_SERVER.getPlayerList().getPlayers();
 
         for (ServerPlayer player : players) {
-            if (player != null && containsPosition(player.position(),inflate)) {
+            if (player != null && containsPosition(player.position(),inflate) && player.level().dimension().identifier().equals(dimension)) {
                 VoicechatConnection connection = RoleplayVoicechatPlugin.voicechatServerApi.getConnectionOf(player.getUUID());
                 Vec3 pos = player.position();
                 double sourceX = Math.clamp(pos.x,this.minX,this.maxX);
@@ -215,18 +217,47 @@ public class Region {
         if (element.isJsonArray()) {
             JsonArray jsonArray = element.getAsJsonArray();
             if (jsonArray.size() == 6) {
-                return new Region(jsonArray.get(0).getAsInt(),
-                        jsonArray.get(1).getAsInt(),
-                        jsonArray.get(2).getAsInt(),
-                        jsonArray.get(3).getAsInt(),
-                        jsonArray.get(4).getAsInt(),
-                        jsonArray.get(5).getAsInt());
+                if (jsonArray.get(0).isJsonPrimitive()) {
+                    return new Region(jsonArray.get(0).getAsInt(),
+                            jsonArray.get(1).getAsInt(),
+                            jsonArray.get(2).getAsInt(),
+                            jsonArray.get(3).getAsInt(),
+                            jsonArray.get(4).getAsInt(),
+                            jsonArray.get(5).getAsInt());
+                }
             }
         } else if (element.isJsonPrimitive()) {
             JsonPrimitive jsonPrimitive = element.getAsJsonPrimitive();
             return new Region(jsonPrimitive.getAsString());
         }
         return null;
+    }
+
+    @Override
+    public String toString() {
+        StringBuilder sb = new StringBuilder();
+        sb.append("id: ");
+        sb.append(this.id);
+        sb.append("\n");
+        sb.append("minX: ");
+        sb.append(minX);
+        sb.append("\n");
+        sb.append("minY: ");
+        sb.append(minY);
+        sb.append("\n");
+        sb.append("minZ: ");
+        sb.append(minZ);
+        sb.append("\n");
+        sb.append("maxX: ");
+        sb.append(maxX);
+        sb.append("\n");
+        sb.append("maxY: ");
+        sb.append(maxY);
+        sb.append("\n");
+        sb.append("maxZ: ");
+        sb.append(maxZ);
+        sb.append("\n");
+        return sb.toString();
     }
 
     public record PlayerPoint (VoicechatConnection connection, Position sourcePos, boolean isInside) { }

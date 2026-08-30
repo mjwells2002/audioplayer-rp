@@ -1,39 +1,51 @@
 package xyz.breadloaf.audioplayerroleplay.modules.Regions;
 
+import de.maxhenkel.voicechat.api.Position;
 import de.maxhenkel.voicechat.api.ServerPlayer;
+import de.maxhenkel.voicechat.api.VoicechatConnection;
 import de.maxhenkel.voicechat.api.VoicechatServerApi;
 import de.maxhenkel.voicechat.api.audiochannel.AudioChannel;
 import de.maxhenkel.voicechat.api.packets.LocationalSoundPacket;
 import de.maxhenkel.voicechat.api.packets.MicrophonePacket;
 import de.maxhenkel.voicechat.api.packets.StaticSoundPacket;
+import net.minecraft.client.Minecraft;
+import net.minecraft.core.particles.ParticleTypes;
+import net.minecraft.resources.Identifier;
+import net.minecraft.server.MinecraftServer;
+import net.minecraft.world.phys.Vec3;
+import org.apache.logging.log4j.core.jmx.Server;
 import org.jetbrains.annotations.Nullable;
+import org.joml.Vector3d;
+import org.joml.Vector3f;
+import org.joml.Vector3i;
 import xyz.breadloaf.audioplayerroleplay.AudioPlayerRoleplayMod;
 import xyz.breadloaf.audioplayerroleplay.voicechat.RoleplayVoicechatPlugin;
 
-import java.util.ArrayList;
-import java.util.UUID;
+import java.util.*;
 import java.util.function.Predicate;
+import java.util.stream.Collectors;
 
 public class HybridRegionChannel implements AudioChannel {
     private final UUID id;
-    private final Region region;
+    private final ArrayList<Region> regions;
     private final float distance;
     private final LocationalSoundPacket.Builder<?> locationalBuilder;
     private final StaticSoundPacket.Builder<?> staticBuilder;
     private String category;
     private long seqno;
+    private Identifier dimension;
     
-    
-    public HybridRegionChannel(UUID id, Region region, float distance, String category) {
+    public HybridRegionChannel(UUID id, ArrayList<Region> region, float distance, String category, Identifier dimension) {
         if (RoleplayVoicechatPlugin.voicechatServerApi == null) {
             throw new IllegalStateException("THE UNIVERSE EXPLODED");
         }
         VoicechatServerApi serverApi = RoleplayVoicechatPlugin.voicechatServerApi;
 
         this.id = id;
-        this.region = region;
+        this.regions = region;
         this.distance = distance;
         this.category = category;
+        this.dimension = dimension;
         this.locationalBuilder = serverApi.createPacket().locationalSoundPacketBuilder();
         this.staticBuilder = serverApi.createPacket().staticSoundPacketBuilder();
         locationalBuilder.channelId(this.id);
@@ -58,18 +70,35 @@ public class HybridRegionChannel implements AudioChannel {
         staticBuilder.sequenceNumber(seqno);
         seqno++;
 
-        ArrayList<Region.PlayerPoint> playerPoints = this.region.getPlayersWithin((int) Math.ceil(this.distance));
+        Map<UUID, List<Region.PlayerPoint>> pointsByConnection = this.regions.stream()
+                .map(x -> x.getPlayersWithin((int) Math.ceil(this.distance),this.dimension))
+                .filter(Objects::nonNull).flatMap(ArrayList::stream)
+                .collect(Collectors.groupingBy(x -> x.connection().getPlayer().getUuid()));
 
-        if (playerPoints != null) {
+        for (Map.Entry<UUID, List<Region.PlayerPoint>> entry : pointsByConnection.entrySet()) {
+            boolean isInside = false;
             StaticSoundPacket packet = staticBuilder.build();
-            for (Region.PlayerPoint point : playerPoints) {
-                if (point.isInside()) {
-                    serverApi.sendStaticSoundPacketTo(point.connection(), packet);
-                } else {
-                    locationalBuilder.position(point.sourcePos());
-                    LocationalSoundPacket locationalSoundPacket = locationalBuilder.build();
-                    serverApi.sendLocationalSoundPacketTo(point.connection(), locationalSoundPacket);
+            Vec3 srcpos = null;
+
+            for (Region.PlayerPoint point : entry.getValue()) {
+                isInside |= point.isInside();
+                Vec3 pos = new Vec3(point.sourcePos().getX(), point.sourcePos().getY(), point.sourcePos().getZ());
+                Position playerPosRaw = point.connection().getPlayer().getPosition();
+                Vec3 playerPos = new Vec3(playerPosRaw.getX(),playerPosRaw.getY(),playerPosRaw.getZ());
+                if (srcpos == null) {
+                    srcpos = pos;
                 }
+                else if (playerPos.distanceTo(srcpos) > playerPos.distanceTo(pos)) {
+                    srcpos = pos;
+                }
+            }
+
+            if (isInside) {
+                serverApi.sendStaticSoundPacketTo(entry.getValue().getFirst().connection(), packet);
+            } else if (srcpos != null) {
+                locationalBuilder.position(serverApi.createPosition(srcpos.x,srcpos.y,srcpos.z));
+                LocationalSoundPacket locationalSoundPacket = locationalBuilder.build();
+                serverApi.sendLocationalSoundPacketTo(entry.getValue().getFirst().connection(), locationalSoundPacket);
             }
         }
     }

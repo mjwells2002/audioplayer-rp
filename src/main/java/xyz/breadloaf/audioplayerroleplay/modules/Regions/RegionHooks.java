@@ -17,11 +17,10 @@ public class RegionHooks {
     static void onPostPlay(PostPlayEvent event) {
         RegionDataModule regionDataModule = event.getData().getModule(REGIONS_DATA_MODULE).orElse(null);
         if (regionDataModule != null) {
-            Region region = regionDataModule.region;
-            if (region.isNearbyEnoughToPlay(event.getPosition())) {
+            if (regionDataModule.isNearbyEnoughToPlay(event.getPosition())) {
                 if (regionDataModule.regionMode != RegionMode.FALLOFF) {
                     ChannelReference<? extends AudioChannel> audioChannelChannelReference = event.getChannel();
-                    audioChannelChannelReference.getChannel().setFilter(serverPlayer -> region.containsPosition(serverPlayer.getPosition()));
+                    audioChannelChannelReference.getChannel().setFilter(serverPlayer -> regionDataModule.containsPosition(serverPlayer.getPosition()));
                 }
             } else {
                 if (event.getPlayer() != null) {
@@ -37,9 +36,8 @@ public class RegionHooks {
     static void onGetDistance(GetDistanceEvent event) {
         RegionDataModule regionDataModule = event.getData().getModule(REGIONS_DATA_MODULE).orElse(null);
         if (regionDataModule != null && regionDataModule.regionMode == RegionMode.CLIP) {
-            Region region = regionDataModule.region;
-            if (region.isNearbyEnoughToPlay(event.getPosition())) {
-                event.setDistance((float) (region.getMaxDistanceTo(event.getPosition()) + 1));
+            if (regionDataModule.isNearbyEnoughToPlay(event.getPosition())) {
+                event.setDistance((float) (regionDataModule.getMaxDistanceTo(event.getPosition()) + 1));
             }
         }
     }
@@ -47,7 +45,7 @@ public class RegionHooks {
     public static void onPlay(PlayEvent event) {
         RegionDataModule regionDataModule = event.getData().getModule(REGIONS_DATA_MODULE).orElse(null);
         if (regionDataModule != null && regionDataModule.regionMode == RegionMode.FALLOFF) {
-            HybridRegionChannel hybridRegionChannel = new HybridRegionChannel(UUID.randomUUID(),regionDataModule.region,event.getDistance(),event.getCategory());
+            HybridRegionChannel hybridRegionChannel = new HybridRegionChannel(UUID.randomUUID(),regionDataModule.regions,event.getDistance(),event.getCategory(), event.getLevel().dimension().identifier());
             ChannelReference<HybridRegionChannel> ref = AudioPlayerApi.instance().playChannel(hybridRegionChannel, event.getSoundId(), event.getPlayer());
             try {
                 event.overrideChannel(ref);
